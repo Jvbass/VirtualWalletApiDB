@@ -4,10 +4,10 @@ import com.google.gson.annotations.SerializedName
 
 data class Users(
     val id: Int,
-    @SerializedName("firstName")
-    val first_name: String,
-    @SerializedName("lastName")
-    val last_name: String,
+    @SerializedName("first_name")
+    val firstName: String,
+    @SerializedName("last_name")
+    val lastName: String,
     val email: String,
     val password: String,
     val points: Int = 800 ,
