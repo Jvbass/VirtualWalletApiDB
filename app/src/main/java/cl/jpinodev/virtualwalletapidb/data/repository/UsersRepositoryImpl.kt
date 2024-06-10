@@ -1,5 +1,7 @@
 package cl.jpinodev.virtualwalletapidb.data.repository
 
+import cl.jpinodev.virtualwalletapidb.data.model.LoginRequest
+import cl.jpinodev.virtualwalletapidb.data.model.LoginTokenResponse
 import cl.jpinodev.virtualwalletapidb.data.model.Users
 import cl.jpinodev.virtualwalletapidb.data.network.api.UserApiService
 import kotlinx.coroutines.Dispatchers
@@ -16,6 +18,12 @@ class UsersRepositoryImpl(private val userService: UserApiService): UsersReposit
     override suspend fun createUser(user: Users): Response<Users> {
         return withContext(Dispatchers.IO) {
             userService.createUser(user)
+        }
+    }
+
+    override suspend fun loginUser(loginRequest: LoginRequest): Response<LoginTokenResponse> {
+        return withContext(Dispatchers.IO) {
+            userService.loginUser(loginRequest)
         }
     }
 }
