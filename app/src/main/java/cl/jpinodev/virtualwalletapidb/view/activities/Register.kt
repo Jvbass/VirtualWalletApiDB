@@ -1,11 +1,11 @@
 package cl.jpinodev.virtualwalletapidb.view.activities
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import cl.jpinodev.virtualwalletapidb.data.model.Users
+import cl.jpinodev.virtualwalletapidb.data.model.entities.Users
 import cl.jpinodev.virtualwalletapidb.data.network.api.UserApiService
 import cl.jpinodev.virtualwalletapidb.data.network.retrofit.RetrofitHelper
 import cl.jpinodev.virtualwalletapidb.data.repository.UsersRepositoryImpl
@@ -14,7 +14,6 @@ import cl.jpinodev.virtualwalletapidb.domain.UsersUseCase
 import cl.jpinodev.virtualwalletapidb.view.utils.ToastUtils
 import cl.jpinodev.virtualwalletapidb.viewmodel.UsersViewModel
 import cl.jpinodev.virtualwalletapidb.viewmodel.UsersViewModelFactory
-import retrofit2.Response
 
 class Register : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
@@ -34,16 +33,17 @@ class Register : AppCompatActivity() {
         val usersViewModel: UsersViewModel by viewModels { UsersViewModelFactory(usersUseCase) }
 
 
-        // Observa los cambios en userLiveData
+        // observer de cambios en userLiveDAta, llamamos la funcion handleSuccess o handleError
         usersViewModel.userLiveData.observe(this, Observer { result ->
             result.onSuccess { response ->
-                handleSuccess(response)
+                //TODO("Implementar crear cuenta con id de usuario ? ")
+                ToastUtils.showCustomToast(this, "Usuario registrado exitosamente")
             }.onFailure { throwable ->
-                handleError(throwable)
+                ToastUtils.showCustomToast(this, "Error al registrar usuario: ${throwable.message}")
             }
         })
 
-        // Botón crear cuenta
+        // Boton para crear cuenta
         binding.crearCuentaBtn.setOnClickListener {
             val nombre = binding.nombreEditText.text.toString()
             val apellido = binding.apellidoEditText.text.toString()
@@ -51,12 +51,13 @@ class Register : AppCompatActivity() {
             val contrasena = binding.passwordEditText.text.toString()
             val contrasenaConfirm = binding.passwordRepeatEditText.text.toString()
 
-            // Validando campos
+            // validacion de campos vacios y contraseña
             if (nombre.isEmpty() || apellido.isEmpty() || email.isEmpty() || contrasena.isEmpty()) {
                 ToastUtils.showCustomToast(this, "Todos los campos son obligatorios")
             } else if (contrasenaConfirm != contrasena) {
                 ToastUtils.showCustomToast(this, "Las contraseñas no coinciden")
             } else {
+                //creamos nuevo usuario con los datos ingresados
                 val newUser = Users(
                     id = 0, // La API generará el ID
                     firstName = nombre,
@@ -64,21 +65,11 @@ class Register : AppCompatActivity() {
                     email = email,
                     password = contrasena
                 )
+                // Llamamos al metodo createUser del ViewModel para crear el usuario
                 usersViewModel.createUser(newUser)
+              val intent = Intent(this, Login::class.java)
+               startActivity(intent)
             }
         }
-    }
-
-    private fun handleSuccess(response: Response<Users>) {
-        if (response.isSuccessful) {
-            ToastUtils.showCustomToast(this, "Usuario registrado exitosamente")
-            // Puedes redirigir al usuario a la pantalla de login o donde desees
-        } else {
-            ToastUtils.showCustomToast(this, "Error: ${response.message()}")
-        }
-    }
-
-    private fun handleError(throwable: Throwable) {
-        ToastUtils.showCustomToast(this, "Error al registrar usuario: ${throwable.message}")
     }
 }

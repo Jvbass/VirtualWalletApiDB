@@ -1,4 +1,4 @@
-package cl.jpinodev.virtualwalletapidb.data.model
+package cl.jpinodev.virtualwalletapidb.data.model.entities
 
 import com.google.gson.annotations.SerializedName
 

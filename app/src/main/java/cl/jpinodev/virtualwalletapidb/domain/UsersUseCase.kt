@@ -1,8 +1,8 @@
 package cl.jpinodev.virtualwalletapidb.domain
 
-import cl.jpinodev.virtualwalletapidb.data.model.LoginRequest
-import cl.jpinodev.virtualwalletapidb.data.model.LoginTokenResponse
-import cl.jpinodev.virtualwalletapidb.data.model.Users
+import cl.jpinodev.virtualwalletapidb.data.model.apientities.LoginRequest
+import cl.jpinodev.virtualwalletapidb.data.model.apientities.LoginResponse
+import cl.jpinodev.virtualwalletapidb.data.model.entities.Users
 import cl.jpinodev.virtualwalletapidb.data.repository.UsersRepository
 import retrofit2.Response
 
@@ -12,7 +12,7 @@ class UsersUseCase(private val repository: UsersRepository) {
         return repository.createUser(user)
     }
 
-    suspend fun loginUser(loginRequest: LoginRequest): Response<LoginTokenResponse> {
+    suspend fun loginUser(loginRequest: LoginRequest): Response<LoginResponse> {
         return repository.loginUser(loginRequest)
     }
 }
