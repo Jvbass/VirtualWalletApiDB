@@ -1,4 +1,4 @@
-package cl.jpinodev.virtualwalletapidb.data.model
+package cl.jpinodev.virtualwalletapidb.data.model.entities
 
 data class Transactions(
     val id: Int,
