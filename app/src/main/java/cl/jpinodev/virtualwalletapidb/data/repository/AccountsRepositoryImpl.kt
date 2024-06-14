@@ -9,6 +9,12 @@ import retrofit2.Response
 
 class AccountsRepositoryImpl(private val accountService: AccountApiService):
     AccountsRepository {
+    override suspend fun getOwnAccounts(token: String): Response<List<Accounts>> {
+        return withContext(Dispatchers.IO) {
+            accountService.getOwnAccounts(token)
+        }
+    }
+
     override suspend fun createAccount(token: String, account: Accounts): Response<Accounts> {
         return withContext(Dispatchers.IO) {
             accountService.createAccount(token,account)

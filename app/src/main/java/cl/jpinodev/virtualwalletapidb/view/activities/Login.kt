@@ -1,5 +1,6 @@
 package cl.jpinodev.virtualwalletapidb.view.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
@@ -22,6 +23,7 @@ class Login : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        /***Dependencias para el login de usuario***/
         // instancia de Retrofit que está configurada para comunicarse con la API.
         val userApiService: UserApiService =
             RetrofitHelper.getRetrofit().create(UserApiService::class.java)
@@ -32,6 +34,7 @@ class Login : AppCompatActivity() {
         //instancia de UsersViewModel usando fabrica UsersViewModelFactory
         val usersViewModel: UsersViewModel by viewModels { UsersViewModelFactory(usersUseCase) }
 
+        /*btnLogin*/
         binding.loginButton.setOnClickListener {
             val email = binding.emailEditText.text.toString()
             val password = binding.passwordEditText.text.toString()
@@ -42,15 +45,39 @@ class Login : AppCompatActivity() {
             }
         }
 
-        usersViewModel.loginLiveData.observe(this, Observer { result ->
+        /*
+        *  Observador para el login de usuario
+        * */
+        usersViewModel.loginLD.observe(this, Observer { result ->
             result.onSuccess { response ->
                 val accessToken = response.body()?.accessToken.toString()
-                SharedPreferences.saveToken(this, accessToken)
-                Log.d("Login", "Token: $accessToken")
-                ToastUtils.showCustomToast(this, "Login exitoso")
+                if (accessToken.isEmpty()) {
+                    ToastUtils.showCustomToast(this, "Error al iniciar sesión")
+                } else {
+                    SharedPreferences.saveToken(this, accessToken)
+                    usersViewModel.getConnectedUser(accessToken)
+                    Log.i("TOKEN", accessToken)
+                    ToastUtils.showCustomToast(this, "Login exitoso")
+                    val intent = Intent(this, MainContainer::class.java)
+                    startActivity(intent) //si la respuesta es exitosa se inicia la actividad
+                    finish() // Llama a finish() para cerrar la actividad de login
+                }
             }
             result.onFailure {
+                Log.i("ErrorLogin", it.message.toString())
                 ToastUtils.showCustomToast(this, "Error al iniciar sesión: ${it.message}")
+            }
+        })
+
+        usersViewModel.connectedUserLD.observe(this, Observer { result ->
+            result.onSuccess { response ->
+                val user = response.body()
+                user?.let {
+                    SharedPreferences.saveConnectedUser( this, it)
+                }
+            }
+            result.onFailure {
+                ToastUtils.showCustomToast(this, "Error al obtener usuario: ${it.message}")
             }
         })
     }

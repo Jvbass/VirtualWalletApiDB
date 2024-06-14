@@ -26,4 +26,10 @@ class UsersRepositoryImpl(private val userService: UserApiService): UsersReposit
             userService.loginUser(loginRequest)
         }
     }
+
+    override suspend fun getConnectedUser(token: String): Response<Users> {
+        return withContext(Dispatchers.IO) {
+            userService.getConnectedUser(token)
+        }
+    }
 }

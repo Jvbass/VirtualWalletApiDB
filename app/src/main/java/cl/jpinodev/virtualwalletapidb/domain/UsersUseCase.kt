@@ -15,4 +15,8 @@ class UsersUseCase(private val repository: UsersRepository) {
     suspend fun loginUser(loginRequest: LoginRequest): Response<LoginResponse> {
         return repository.loginUser(loginRequest)
     }
+
+    suspend fun getConnectedUser(token: String): Response<Users> {
+        return repository.getConnectedUser(token)
+    }
 }

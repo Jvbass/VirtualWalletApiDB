@@ -5,6 +5,8 @@ import cl.jpinodev.virtualwalletapidb.data.model.apientities.LoginResponse
 import cl.jpinodev.virtualwalletapidb.data.model.entities.Users
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface UserApiService {
@@ -16,4 +18,7 @@ interface UserApiService {
     // Endpoint Logear Un usuairo, envia por el body el usuario
     @POST("auth/login")
     suspend fun loginUser(@Body loginRequest: LoginRequest): Response<LoginResponse>
+
+    @GET("auth/me")
+    suspend fun getConnectedUser(@Header("Authorization") token: String): Response<Users>
 }

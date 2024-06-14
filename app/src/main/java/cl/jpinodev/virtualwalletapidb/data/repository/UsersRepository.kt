@@ -10,4 +10,6 @@ interface UsersRepository {
 
     suspend fun loginUser(loginRequest: LoginRequest): Response<LoginResponse>
 
+    suspend fun getConnectedUser(token: String): Response<Users>
+
 }

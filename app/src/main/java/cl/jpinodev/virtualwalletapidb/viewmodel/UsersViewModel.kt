@@ -13,11 +13,13 @@ import kotlinx.coroutines.launch
 import retrofit2.Response
 
 class UsersViewModel(private val usersUseCase: UsersUseCase) : ViewModel() {
-    private val _userLiveData = MutableLiveData<Result<Response<Users>>>()
-    private val _loginLiveData = MutableLiveData<Result<Response<LoginResponse>>>()
+    private val _userLD = MutableLiveData<Result<Response<Users>>>()
+    private val _loginLD = MutableLiveData<Result<Response<LoginResponse>>>()
+    private val _connectedUserLD = MutableLiveData<Result<Response<Users>>>()
 
-    val userLiveData: LiveData<Result<Response<Users>>> = _userLiveData
-    val loginLiveData: LiveData<Result<Response<LoginResponse>>> = _loginLiveData
+    val userLD: LiveData<Result<Response<Users>>> = _userLD
+    val loginLD: LiveData<Result<Response<LoginResponse>>> = _loginLD
+    val connectedUserLD: LiveData<Result<Response<Users>>> = _connectedUserLD
 
     // metodo para crear un usuario
     fun createUser(user: Users) {
@@ -26,14 +28,14 @@ class UsersViewModel(private val usersUseCase: UsersUseCase) : ViewModel() {
                 // llamada al usecase pasamos el usuario recibido desde la vista
                 // manejamos el response asignandola a _userLiveData
                 val response = usersUseCase.createUser(user)
-                Log.i("UsersViewModel", "createUser: $response")
+
                 if (response.isSuccessful) {
-                    _userLiveData.postValue(Result.success(response))
+                    _userLD.postValue(Result.success(response))
                 } else {
-                    _userLiveData.postValue(Result.failure(Exception(response.errorBody()?.string())))
+                    _userLD.postValue(Result.failure(Exception(response.errorBody()?.string())))
                 }
             } catch (e: Exception) {
-                _userLiveData.postValue(Result.failure(e))
+                _userLD.postValue(Result.failure(e))
             }
         }
     }
@@ -41,14 +43,38 @@ class UsersViewModel(private val usersUseCase: UsersUseCase) : ViewModel() {
     fun loginUser(email: String, password: String) {
         viewModelScope.launch {
             try {
-                val response = usersUseCase.loginUser(LoginRequest(email, password))
-                if (response.isSuccessful) {
-                    _loginLiveData.postValue(Result.success(response))
+                val login = usersUseCase.loginUser(LoginRequest(email, password))
+                if (login.isSuccessful) {
+                    val result = Result.success(login)
+                    _loginLD.postValue(result)
+                    Log.i("UsersViewModel", "loginUser: $result")
+
                 } else {
-                    _loginLiveData.postValue(Result.failure(Exception(response.errorBody()?.string())))
+                    _loginLD.postValue(Result.failure(Exception(login.errorBody()?.string())))
                 }
             } catch (e: Exception) {
-                _loginLiveData.postValue(Result.failure(e))
+                _loginLD.postValue(Result.failure(e))
+            }
+        }
+    }
+
+    fun getConnectedUser(token: String) {
+        viewModelScope.launch {
+            try {
+                val response = usersUseCase.getConnectedUser(token)
+                if (response.isSuccessful) {
+                    _connectedUserLD.postValue(Result.success(response))
+                } else {
+                    _connectedUserLD.postValue(
+                        Result.failure(
+                            Exception(
+                                response.errorBody()?.string()
+                            )
+                        )
+                    )
+                }
+            } catch (e: Exception) {
+                _connectedUserLD.postValue(Result.failure(e))
             }
         }
     }

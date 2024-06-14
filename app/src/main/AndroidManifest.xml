@@ -16,6 +16,13 @@
         android:theme="@style/Theme.VirtualWalletApiDB"
         tools:targetApi="31">
         <activity
+            android:name=".view.fragments.TransactionReceive"
+            android:exported="false"
+            android:theme="@style/Theme.VirtualWalletApiDB" />
+        <activity
+            android:name=".view.activities.MainContainer"
+            android:exported="false" />
+        <activity
             android:name=".view.activities.Splash"
             android:exported="true">
             <intent-filter>

@@ -34,7 +34,7 @@ class Register : AppCompatActivity() {
 
 
         // observer de cambios en userLiveDAta, llamamos la funcion handleSuccess o handleError
-        usersViewModel.userLiveData.observe(this, Observer { result ->
+        usersViewModel.userLD.observe(this, Observer { result ->
             result.onSuccess { response ->
                 //TODO("Implementar crear cuenta con id de usuario ? ")
                 ToastUtils.showCustomToast(this, "Usuario registrado exitosamente")
@@ -59,7 +59,7 @@ class Register : AppCompatActivity() {
             } else {
                 //creamos nuevo usuario con los datos ingresados
                 val newUser = Users(
-                    id = 0, // La API generará el ID
+                    id = 0,
                     firstName = nombre,
                     lastName = apellido,
                     email = email,
