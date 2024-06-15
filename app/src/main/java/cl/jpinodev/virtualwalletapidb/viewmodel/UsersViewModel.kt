@@ -61,7 +61,7 @@ class UsersViewModel(private val usersUseCase: UsersUseCase) : ViewModel() {
     fun getConnectedUser(token: String) {
         viewModelScope.launch {
             try {
-                val response = usersUseCase.getConnectedUser(token)
+                val response = usersUseCase.getConnectedUser("Bearer $token")
                 if (response.isSuccessful) {
                     _connectedUserLD.postValue(Result.success(response))
                 } else {

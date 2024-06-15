@@ -62,28 +62,6 @@
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintTop_toTopOf="@+id/guideline" />
 
-        <TextView
-            android:id="@+id/currency_symbol"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/font_jua_wallet"
-            android:text="@string/peso"
-            android:textColor="@color/white"
-            android:textSize="48sp"
-            app:layout_constraintBottom_toTopOf="@+id/guideline3"
-            app:layout_constraintStart_toStartOf="@+id/guideline1" />
-
-        <TextView
-            android:id="@+id/balance_amount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/font_jua_wallet"
-            android:text="124.57"
-            android:textColor="@color/white"
-            android:textSize="48sp"
-            app:layout_constraintBottom_toTopOf="@+id/guideline3"
-            app:layout_constraintStart_toEndOf="@+id/currency_symbol" />
-
         <ImageView
             android:id="@+id/notificaction_icon"
             android:layout_width="wrap_content"
@@ -93,44 +71,29 @@
             app:layout_constraintEnd_toStartOf="@+id/guideline2" />
 
         <TextView
-            android:id="@+id/balance_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:fontFamily="@font/font_jua_wallet"
-            android:text="@string/balance_total"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/balance_amount"
-            app:layout_constraintStart_toStartOf="@+id/guideline1" />
-
-        <TextView
             android:id="@+id/greeting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="5dp"
             android:fontFamily="@font/font_jua_wallet"
             android:text="@string/hola"
             android:textColor="@color/opacity_white"
-            android:textSize="16sp"
 
-            app:layout_constraintBottom_toTopOf="@+id/balance_title"
-            app:layout_constraintEnd_toStartOf="@+id/greeting_name"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/guideline1" />
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/greeting_name"
+            app:layout_constraintEnd_toStartOf="@+id/greeting_name" />
 
         <TextView
             android:id="@+id/greeting_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
             android:fontFamily="@font/font_jua_wallet"
             android:text="Amanda"
             android:textColor="@color/opacity_white"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/balance_title"
-            app:layout_constraintStart_toEndOf="@+id/greeting" />
+            app:layout_constraintEnd_toStartOf="@+id/exclamation"
+            app:layout_constraintTop_toBottomOf="@+id/profile_image" />
 
         <TextView
             android:id="@+id/exclamation"
@@ -141,7 +104,97 @@
             android:textColor="@color/opacity_white"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@+id/greeting_name"
-            app:layout_constraintStart_toEndOf="@+id/greeting_name" />
+            app:layout_constraintEnd_toStartOf="@+id/guideline2" />
+
+        <!--Resumen de cuenta -->
+        <LinearLayout
+            android:id="@+id/accountResume"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+
+            app:layout_constraintBottom_toTopOf="@+id/guideline3"
+            app:layout_constraintStart_toStartOf="@+id/guideline1">
+            <LinearLayout
+                android:id="@+id/account_number_section"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/account_number_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/font_jua_wallet"
+                    android:text="Cuenta número"
+                    android:textColor="@color/opacity_white" />
+
+                <TextView
+                    android:id="@+id/account_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:fontFamily="@font/font_jua_wallet"
+                    android:text="307"
+                    android:textSize="15sp"
+                    android:textColor="@color/color_grey" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/balance_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/font_jua_wallet"
+                android:text="@string/balance_total"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <LinearLayout
+                android:id="@+id/balance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/currency_symbol"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/font_jua_wallet"
+                    android:text="@string/peso"
+                    android:textColor="@color/white"
+                    android:textSize="48sp" />
+
+                <TextView
+                    android:id="@+id/balance_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/font_jua_wallet"
+                    android:text="124.57"
+                    android:textColor="@color/white"
+                    android:textSize="48sp" />
+            </LinearLayout>
+        </LinearLayout>
+        <!--End Resumen de cuenta -->
+        <!-- Btn Crear Cuenta-->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCreateAccount"
+            android:layout_width="160dp"
+            android:layout_height="35dp"
+            android:visibility="gone"
+            android:layout_marginBottom="25dp"
+            android:backgroundTint="@color/white"
+            android:fontFamily="@font/font_jua_wallet"
+            android:text="Crear Cuenta"
+            android:textColor="@color/primary"
+            android:textSize="14sp"
+            app:cornerRadius="10dp"
+            app:icon="@drawable/send_icon"
+            app:iconTint="@color/primary"
+            app:layout_constraintBottom_toTopOf="@+id/guideline3"
+            app:layout_constraintStart_toStartOf="@+id/guideline1" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
     <!-- buttons-->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -208,8 +261,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/empty_transaction_list"
             android:layout_width="match_parent"
-            android:visibility="gone"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/imageView"
