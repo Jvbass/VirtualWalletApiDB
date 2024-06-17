@@ -23,6 +23,7 @@ class Login : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         /***Dependencias para el login de usuario***/
         // instancia de Retrofit que está configurada para comunicarse con la API.
         val userApiService: UserApiService =
@@ -59,8 +60,8 @@ class Login : AppCompatActivity() {
                     Log.i("TOKEN", accessToken)
                     ToastUtils.showCustomToast(this, "Login exitoso")
                     val intent = Intent(this, MainContainer::class.java)
-                    startActivity(intent) //si la respuesta es exitosa se inicia la actividad
-                    finish() // Llama a finish() para cerrar la actividad de login
+                    startActivity(intent)
+                    finish()
                 }
             }
             result.onFailure {

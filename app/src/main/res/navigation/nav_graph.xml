@@ -8,5 +8,14 @@
         android:id="@+id/homePage"
         android:name="cl.jpinodev.virtualwalletapidb.view.fragments.HomePage"
         android:label="fragment_home_page"
-        tools:layout="@layout/fragment_home_page" />
+        tools:layout="@layout/fragment_home_page" >
+        <action
+            android:id="@+id/action_homePage_to_transactionSend"
+            app:destination="@id/transactionSend" />
+    </fragment>
+    <fragment
+        android:id="@+id/transactionSend"
+        android:name="cl.jpinodev.virtualwalletapidb.view.fragments.TransactionSend"
+        android:label="fragment_transaction_send"
+        tools:layout="@layout/fragment_transaction_send" />
 </navigation>

@@ -112,7 +112,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/guideline3"
             app:layout_constraintStart_toStartOf="@+id/guideline1">
             <LinearLayout
@@ -179,20 +179,21 @@
         <!-- Btn Crear Cuenta-->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCreateAccount"
-            android:layout_width="160dp"
-            android:layout_height="35dp"
-            android:visibility="gone"
-            android:layout_marginBottom="25dp"
+            android:layout_width="162dp"
+            android:layout_height="50dp"
+
             android:backgroundTint="@color/white"
             android:fontFamily="@font/font_jua_wallet"
             android:text="Crear Cuenta"
             android:textColor="@color/primary"
             android:textSize="14sp"
             app:cornerRadius="10dp"
-            app:icon="@drawable/send_icon"
+            app:icon="@drawable/plus_symbol"
             app:iconTint="@color/primary"
             app:layout_constraintBottom_toTopOf="@+id/guideline3"
-            app:layout_constraintStart_toStartOf="@+id/guideline1" />
+            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            app:layout_constraintStart_toStartOf="@+id/guideline1"
+            app:layout_constraintTop_toBottomOf="@+id/greeting_name" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -252,12 +253,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- Recycler transactions-->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerTransactionList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:listitem="@layout/transaction_item" />
 
+        <!--EmptyTransaction-->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/empty_transaction_list"
             android:layout_width="match_parent"

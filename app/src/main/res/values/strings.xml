@@ -48,4 +48,6 @@
     <string name="peso">$</string>
     <string name="balance_total">Balance total</string>
     <string name="hola">Hola,</string>
+    <string name="ingrese_numero_de_cuenta">Ingrese numero de cuenta</string>
+    <string name="agregar_notas_de_transferencia_opcional">Agregar notas de transferencia (opcional)</string>
 </resources>
