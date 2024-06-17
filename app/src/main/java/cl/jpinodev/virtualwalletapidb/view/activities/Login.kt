@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import cl.jpinodev.virtualwalletapidb.data.appdata.SharedPreferences
+import cl.jpinodev.virtualwalletapidb.data.appdata.SharedPreferencesHelper
 import cl.jpinodev.virtualwalletapidb.data.network.api.UserApiService
 import cl.jpinodev.virtualwalletapidb.data.network.retrofit.RetrofitHelper
 import cl.jpinodev.virtualwalletapidb.data.repository.UsersRepositoryImpl
@@ -55,7 +55,7 @@ class Login : AppCompatActivity() {
                 if (accessToken.isEmpty()) {
                     ToastUtils.showCustomToast(this, "Error al iniciar sesión")
                 } else {
-                    SharedPreferences.saveToken(this, accessToken)
+                    SharedPreferencesHelper.saveToken(this, accessToken)
                     usersViewModel.getConnectedUser(accessToken)
                     Log.i("TOKEN", accessToken)
                     ToastUtils.showCustomToast(this, "Login exitoso")
@@ -74,7 +74,7 @@ class Login : AppCompatActivity() {
             result.onSuccess { response ->
                 val user = response.body()
                 user?.let {
-                    SharedPreferences.saveConnectedUser( this, it)
+                    SharedPreferencesHelper.saveConnectedUser( this, it)
                 }
             }
             result.onFailure {

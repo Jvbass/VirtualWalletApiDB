@@ -6,7 +6,7 @@ import cl.jpinodev.virtualwalletapidb.data.model.entities.Accounts
 import cl.jpinodev.virtualwalletapidb.data.model.entities.Users
 import com.google.gson.Gson
 
-object SharedPreferences {
+object SharedPreferencesHelper {
     private const val PREFS_NAME = "my_prefs" // identificador para las sharedpreferencens
     private const val TOKEN = "ApiKey"
     private const val CONNECTED_USER = "User"

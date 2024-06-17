@@ -3,7 +3,7 @@ package cl.jpinodev.virtualwalletapidb.view.activities
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import cl.jpinodev.virtualwalletapidb.data.appdata.SharedPreferences
+import cl.jpinodev.virtualwalletapidb.data.appdata.SharedPreferencesHelper
 import cl.jpinodev.virtualwalletapidb.databinding.ActivityMainContainerBinding
 
 class MainContainer : AppCompatActivity() {
@@ -18,7 +18,7 @@ class MainContainer : AppCompatActivity() {
 
     override fun onBackPressed() {
         // Limpiar SharedPreferences
-        SharedPreferences.clearAll(this)
+        SharedPreferencesHelper.clearAll(this)
 
         // Navegar de regreso a LoginActivity
         val intent = Intent(this, Login::class.java)

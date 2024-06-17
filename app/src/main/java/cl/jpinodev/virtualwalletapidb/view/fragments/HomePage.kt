@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import cl.jpinodev.virtualwalletapidb.R
-import cl.jpinodev.virtualwalletapidb.data.appdata.SharedPreferences
+import cl.jpinodev.virtualwalletapidb.data.appdata.SharedPreferencesHelper
 import cl.jpinodev.virtualwalletapidb.data.network.api.AccountApiService
 import cl.jpinodev.virtualwalletapidb.data.network.api.TransactionApiService
 import cl.jpinodev.virtualwalletapidb.data.network.retrofit.RetrofitHelper
@@ -78,13 +78,13 @@ class HomePage : Fragment() {
             navController.navigate(R.id.transactionSend)
         }
 
-        val user = SharedPreferences.getConnectedUser(requireContext())
+        val user = SharedPreferencesHelper.getConnectedUser(requireContext())
         user?.let {
             val fullName = "${it.firstName} ${it.lastName}"
             binding.greetingName.text = fullName
         }
 
-        val token = SharedPreferences.getToken(requireContext())
+        val token = SharedPreferencesHelper.getToken(requireContext())
         Log.i("HomePage", token.toString())
         token?.let {
             accountsViewModel.getOwnAccounts("Bearer $token")
