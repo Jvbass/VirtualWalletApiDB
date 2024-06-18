@@ -77,6 +77,9 @@ class HomePage : Fragment() {
         binding.btnSend.setOnClickListener {
             navController.navigate(R.id.transactionSend)
         }
+        binding.btnRequest.setOnClickListener {
+            navController.navigate(R.id.transactionReceive)
+        }
 
         val user = SharedPreferencesHelper.getConnectedUser(requireContext())
         user?.let {
@@ -101,6 +104,7 @@ class HomePage : Fragment() {
                 if (!accounts.isNullOrEmpty()) {
                     // Mostrar la primera cuenta
                     val account = accounts[0]
+                    SharedPreferencesHelper.saveAccount(requireContext(), account)
                     binding.accountResume.visibility = View.VISIBLE
                     binding.btnCreateAccount.visibility = View.GONE
 

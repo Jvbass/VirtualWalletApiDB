@@ -4,49 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.fragments.TransactionSend">
-
-    <TextView
-        android:id="@+id/labelToAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:fontFamily="@font/font_jua_wallet"
-        android:text="Numero de cuenta destino"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@+id/guideline4"
-        app:layout_constraintTop_toBottomOf="@+id/materialToolbar" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/toAccountInput"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="8dp"
-        android:hint="@string/ingrese_numero_de_cuenta"
-        android:textColorHint="@color/black_light"
-        app:boxBackgroundColor="@android:color/white"
-        app:boxCornerRadiusBottomEnd="15dp"
-        app:boxCornerRadiusBottomStart="15dp"
-        app:boxCornerRadiusTopEnd="15dp"
-        app:boxCornerRadiusTopStart="15dp"
-        app:boxStrokeColor="@color/color_send"
-        app:boxStrokeWidth="2dp"
-        app:boxStrokeWidthFocused="3dp"
-        app:hintEnabled="true"
-        app:layout_constraintEnd_toStartOf="@+id/guideline5"
-        app:layout_constraintStart_toStartOf="@+id/guideline4"
-        app:layout_constraintTop_toBottomOf="@+id/labelToAccount"
-        app:placeholderTextColor="@color/color_send">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/toAccountEditText"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fontFamily="@font/font_jua_wallet"
-            android:inputType="number"
-            android:textColor="@color/color_send" />
-    </com.google.android.material.textfield.TextInputLayout>
+    tools:context=".view.fragments.TransactionReceive">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
@@ -71,10 +29,10 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="?attr/homeAsUpIndicator"
         app:navigationIconTint="@color/black"
-        app:title="Enviar Dinero"
+        app:title="Ingresar Dinero"
         app:titleCentered="true"
         app:titleTextAppearance="@style/Toolbar.TitleText"
-        app:titleTextColor="@color/color_send" />
+        app:titleTextColor="@color/primary_dark" />
 
     <View
         android:id="@+id/view"
@@ -84,6 +42,38 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/materialToolbar" />
+
+    <ImageView
+        android:id="@+id/imageUsuario"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="24dp"
+        android:contentDescription="imagen_de_usuario"
+        android:src="@drawable/pp_standar"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
+        app:layout_constraintTop_toBottomOf="@+id/materialToolbar" />
+
+
+    <TextView
+        android:id="@+id/nombreUsuario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:fontFamily="@font/font_jua_wallet"
+        android:text="nombre"
+        app:layout_constraintBottom_toBottomOf="@+id/imageUsuario"
+        app:layout_constraintStart_toEndOf="@+id/imageUsuario"
+        app:layout_constraintTop_toTopOf="@+id/imageUsuario" />
+
+    <TextView
+        android:id="@+id/apellidoUsuario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:fontFamily="@font/font_jua_wallet"
+        android:text="apellido"
+        app:layout_constraintStart_toEndOf="@+id/nombreUsuario"
+        app:layout_constraintTop_toTopOf="@+id/nombreUsuario" />
 
     <TextView
         android:id="@+id/label_cantidad_ingresar"
@@ -95,36 +85,36 @@
         android:textColor="@color/black"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
-        app:layout_constraintTop_toBottomOf="@+id/toAccountInput" />
+        app:layout_constraintTop_toBottomOf="@+id/imageUsuario" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/input_qty_send"
+        android:id="@+id/input_amount_send"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginTop="8dp"
-        android:hint="Ingrese cantidad a transferir"
+        android:hint="Ingrese cantidad a depositar"
         android:textColorHint="@color/black_light"
         app:boxBackgroundColor="@android:color/white"
         app:boxCornerRadiusBottomEnd="15dp"
         app:boxCornerRadiusBottomStart="15dp"
         app:boxCornerRadiusTopEnd="15dp"
         app:boxCornerRadiusTopStart="15dp"
-        app:boxStrokeColor="@color/color_send"
+        app:boxStrokeColor="@color/primary"
         app:boxStrokeWidth="2dp"
         app:boxStrokeWidthFocused="3dp"
         app:hintEnabled="true"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toBottomOf="@+id/label_cantidad_ingresar"
-        app:placeholderTextColor="@color/color_send">
+        app:placeholderTextColor="@color/primary">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/amountEditText"
+            android:id="@+id/txtAmountSend"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fontFamily="@font/font_jua_wallet"
             android:inputType="numberDecimal"
-            android:textColor="@color/color_send" />
+            android:textColor="@color/primary" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
@@ -137,38 +127,38 @@
         android:textColor="@color/black"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
-        app:layout_constraintTop_toBottomOf="@+id/input_qty_send" />
+        app:layout_constraintTop_toBottomOf="@+id/input_amount_send" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/input_comentario_transferencia"
         android:layout_width="0dp"
         android:layout_height="200dp"
         android:layout_marginTop="8dp"
-        android:hint="@string/agregar_notas_de_transferencia_opcional"
+        android:hint="Agregar notas de deposito (opcional)"
         android:textColorHint="@color/black_light"
         app:boxBackgroundColor="@android:color/white"
         app:boxCornerRadiusBottomEnd="15dp"
         app:boxCornerRadiusBottomStart="15dp"
         app:boxCornerRadiusTopEnd="15dp"
         app:boxCornerRadiusTopStart="15dp"
-        app:boxStrokeColor="@color/color_send"
+        app:boxStrokeColor="@color/primary"
         app:boxStrokeWidth="2dp"
         app:boxStrokeWidthFocused="3dp"
+        app:hintEnabled="true"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toBottomOf="@+id/label_comentario_transferencia"
-        app:placeholderTextColor="@color/color_send">
+        app:placeholderTextColor="@color/primary">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/txtMessage"
+            android:id="@+id/txtDepositComment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fontFamily="@font/font_jua_wallet"
             android:gravity="top|start"
             android:inputType="textMultiLine"
             android:textColor="@color/black"
-            android:textSize="14sp"
-            app:hintEnabled="true" />
+            android:textSize="14sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <ImageView
@@ -181,23 +171,24 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/sendButton"
+        android:id="@+id/buttonReceive"
         android:layout_width="match_parent"
         android:layout_height="49dp"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
-        android:backgroundTint="@color/color_send"
+        android:backgroundTint="@color/primary_dark"
         android:fontFamily="@font/jua"
-        android:text="enviar dinero"
-        android:textColor="@color/black"
+        android:text="ingresar dinero"
+        android:textColor="@color/white"
         android:textSize="16sp"
         android:translationZ="100dp"
         app:cornerRadius="10dp"
-        app:icon="@drawable/send_icon"
+        app:icon="@drawable/request_icon_blue"
         app:iconGravity="textStart"
-        app:iconTint="@color/black"
+        app:iconTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toTopOf="@+id/bg_transactionbtn" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

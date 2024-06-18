@@ -12,10 +12,18 @@
         <action
             android:id="@+id/action_homePage_to_transactionSend"
             app:destination="@id/transactionSend" />
+        <action
+            android:id="@+id/action_homePage_to_transactionReceive"
+            app:destination="@id/transactionReceive" />
     </fragment>
     <fragment
         android:id="@+id/transactionSend"
         android:name="cl.jpinodev.virtualwalletapidb.view.fragments.TransactionSend"
         android:label="fragment_transaction_send"
         tools:layout="@layout/fragment_transaction_send" />
+    <fragment
+        android:id="@+id/transactionReceive"
+        android:name="cl.jpinodev.virtualwalletapidb.view.fragments.TransactionReceive"
+        android:label="fragment_transaction_receive"
+        tools:layout="@layout/fragment_transaction_receive" />
 </navigation>

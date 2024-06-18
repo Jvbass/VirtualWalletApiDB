@@ -1,7 +1,7 @@
 package cl.jpinodev.virtualwalletapidb.domain
 
-import cl.jpinodev.virtualwalletapidb.data.model.apientities.SendMoneyRequest
-import cl.jpinodev.virtualwalletapidb.data.model.apientities.SendMoneyResponse
+import cl.jpinodev.virtualwalletapidb.data.model.apientities.OperationRequest
+import cl.jpinodev.virtualwalletapidb.data.model.apientities.OperationResponse
 import cl.jpinodev.virtualwalletapidb.data.model.entities.Accounts
 import cl.jpinodev.virtualwalletapidb.data.repository.AccountsRepository
 import retrofit2.Response
@@ -15,7 +15,7 @@ class AccountsUseCase(private val accountRepository: AccountsRepository) {
         return accountRepository.createAccount(token,account)
     }
 
-    suspend fun sendDepositMoney(accountId: Int,token: String,account: SendMoneyRequest): Response<SendMoneyResponse> {
+    suspend fun sendDepositMoney(accountId: Int,token: String,account: OperationRequest): Response<OperationResponse> {
         return accountRepository.sendDepositMoney(accountId,token,account)
     }
 }

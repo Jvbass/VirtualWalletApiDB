@@ -1,8 +1,7 @@
 package cl.jpinodev.virtualwalletapidb.data.repository
 
-import android.accounts.Account
-import cl.jpinodev.virtualwalletapidb.data.model.apientities.SendMoneyRequest
-import cl.jpinodev.virtualwalletapidb.data.model.apientities.SendMoneyResponse
+import cl.jpinodev.virtualwalletapidb.data.model.apientities.OperationRequest
+import cl.jpinodev.virtualwalletapidb.data.model.apientities.OperationResponse
 import cl.jpinodev.virtualwalletapidb.data.model.entities.Accounts
 import cl.jpinodev.virtualwalletapidb.data.network.api.AccountApiService
 import kotlinx.coroutines.Dispatchers
@@ -26,8 +25,8 @@ class AccountsRepositoryImpl(private val accountService: AccountApiService):
     override suspend fun sendDepositMoney(
         accountId: Int,
         token: String,
-        request: SendMoneyRequest
-    ): Response<SendMoneyResponse> {
+        request: OperationRequest
+    ): Response<OperationResponse> {
         return withContext(Dispatchers.IO) {
             accountService.sendDepositMoney(accountId,token,request)
         }

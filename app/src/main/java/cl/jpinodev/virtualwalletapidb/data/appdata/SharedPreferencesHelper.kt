@@ -10,7 +10,7 @@ object SharedPreferencesHelper {
     private const val PREFS_NAME = "my_prefs" // identificador para las sharedpreferencens
     private const val TOKEN = "ApiKey"
     private const val CONNECTED_USER = "User"
-    private const val ACCOUNT = "Account"
+    private const val CONNECTED_ACCOUNT = "Account"
 
     private fun getSharedPreferences(context: Context): SharedPreferences {
         return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -45,12 +45,12 @@ object SharedPreferencesHelper {
     fun saveAccount(context: Context, account: Accounts) {
         val editor = getSharedPreferences(context).edit()
         val json = Gson().toJson(account)
-        editor.putString(ACCOUNT, json)
+        editor.putString(CONNECTED_ACCOUNT, json)
         editor.apply()
     }
 
     fun getAccount(context: Context): Accounts? {
-        val json = getSharedPreferences(context).getString(ACCOUNT, null)
+        val json = getSharedPreferences(context).getString(CONNECTED_ACCOUNT, null)
         return if (json != null) {
             Gson().fromJson(json, Accounts::class.java)
         } else {
@@ -61,7 +61,7 @@ object SharedPreferencesHelper {
     fun clearAll(context: Context) {
         val editor = getSharedPreferences(context).edit()
         editor.remove(CONNECTED_USER)
-        editor.remove(ACCOUNT)
+        editor.remove(CONNECTED_ACCOUNT)
         editor.remove(TOKEN)
         editor.apply()
     }

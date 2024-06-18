@@ -1,7 +1,7 @@
 package cl.jpinodev.virtualwalletapidb.data.network.api
 
-import cl.jpinodev.virtualwalletapidb.data.model.apientities.SendMoneyRequest
-import cl.jpinodev.virtualwalletapidb.data.model.apientities.SendMoneyResponse
+import cl.jpinodev.virtualwalletapidb.data.model.apientities.OperationRequest
+import cl.jpinodev.virtualwalletapidb.data.model.apientities.OperationResponse
 import cl.jpinodev.virtualwalletapidb.data.model.entities.Accounts
 import retrofit2.Response
 import retrofit2.http.Body
@@ -25,6 +25,6 @@ interface AccountApiService {
         suspend fun sendDepositMoney(
                 @Path("id") accountId: Int,
                 @Header("Authorization") token: String,
-                @Body request: SendMoneyRequest
-        ): Response<SendMoneyResponse>
+                @Body request: OperationRequest
+        ): Response<OperationResponse>
 }
