@@ -23,6 +23,11 @@ class Register : AppCompatActivity() {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.linkLogin.setOnClickListener {
+            val intent = Intent(this, Login::class.java)
+            startActivity(intent)
+        }
+
         // instancia de Retrofit que está configurada para comunicarse con la API.
         val userApiService: UserApiService = RetrofitHelper.getRetrofit().create(UserApiService::class.java)
         //instancia de UsersRepositoryImpl

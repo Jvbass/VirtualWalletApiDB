@@ -47,6 +47,7 @@ class HomePage : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentHomePageBinding.bind(view)
 
+
         //config accountsViewmodel
         val accountService: AccountApiService =
             RetrofitHelper.getRetrofit().create(AccountApiService::class.java)
@@ -72,6 +73,11 @@ class HomePage : Fragment() {
         transactionAdapter = TransactionAdapter(emptyList())
         binding.recyclerTransactionList.adapter = transactionAdapter
 
+        val user = SharedPreferencesHelper.getConnectedUser(requireContext())
+        user?.let {
+            val fullName = "${it.firstName} ${it.lastName}"
+            binding.fullName.text = fullName
+        }
 
         val navController = Navigation.findNavController(view)
         binding.btnSend.setOnClickListener {
@@ -81,11 +87,10 @@ class HomePage : Fragment() {
             navController.navigate(R.id.transactionReceive)
         }
 
-        val user = SharedPreferencesHelper.getConnectedUser(requireContext())
-        user?.let {
-            val fullName = "${it.firstName} ${it.lastName}"
-            binding.greetingName.text = fullName
+        binding.profileImage.setOnClickListener {
+            navController.navigate(R.id.profile)
         }
+
 
         val token = SharedPreferencesHelper.getToken(requireContext())
         Log.i("HomePage", token.toString())

@@ -11,19 +11,20 @@ class MainContainer : AppCompatActivity() {
     private lateinit var binding: ActivityMainContainerBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= ActivityMainContainerBinding.inflate(layoutInflater)
+        binding = ActivityMainContainerBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
 
-
-    override fun onBackPressed() {
-        // Limpiar SharedPreferences
+    override fun onDestroy() {
+        super.onDestroy()
         SharedPreferencesHelper.clearAll(this)
 
-        // Navegar de regreso a LoginActivity
+    }
+    /*override fun onBackPressed() {
+        SharedPreferencesHelper.clearAll(this)
         val intent = Intent(this, Login::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish() // Llama a finish() para cerrar MainContainer
-    }
+    }*/
 }

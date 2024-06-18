@@ -28,15 +28,15 @@ object SharedPreferencesHelper {
 
     fun saveConnectedUser(context: Context, user: Users) {
         val editor = getSharedPreferences(context).edit()
-        val json = Gson().toJson(user)
-        editor.putString(CONNECTED_USER, json)
+        val userJson = Gson().toJson(user)
+        editor.putString(CONNECTED_USER, userJson)
         editor.apply()
     }
 
     fun getConnectedUser(context: Context): Users? {
-        val json = getSharedPreferences(context).getString(CONNECTED_USER, null)
-        return if (json != null) {
-            Gson().fromJson(json, Users::class.java)
+        val userJson = getSharedPreferences(context).getString(CONNECTED_USER, null)
+        return if (userJson != null) {
+            Gson().fromJson(userJson, Users::class.java)
         } else {
             null
         }

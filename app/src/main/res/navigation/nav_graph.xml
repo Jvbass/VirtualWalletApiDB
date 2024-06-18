@@ -15,15 +15,35 @@
         <action
             android:id="@+id/action_homePage_to_transactionReceive"
             app:destination="@id/transactionReceive" />
+        <action
+            android:id="@+id/action_homePage_to_profile"
+            app:destination="@id/profile" />
     </fragment>
     <fragment
         android:id="@+id/transactionSend"
         android:name="cl.jpinodev.virtualwalletapidb.view.fragments.TransactionSend"
         android:label="fragment_transaction_send"
-        tools:layout="@layout/fragment_transaction_send" />
+        tools:layout="@layout/fragment_transaction_send" >
+        <action
+            android:id="@+id/action_transactionSend_to_homePage"
+            app:destination="@id/homePage" />
+    </fragment>
     <fragment
         android:id="@+id/transactionReceive"
         android:name="cl.jpinodev.virtualwalletapidb.view.fragments.TransactionReceive"
         android:label="fragment_transaction_receive"
-        tools:layout="@layout/fragment_transaction_receive" />
+        tools:layout="@layout/fragment_transaction_receive" >
+        <action
+            android:id="@+id/action_transactionReceive_to_homePage"
+            app:destination="@id/homePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/profile"
+        android:name="cl.jpinodev.virtualwalletapidb.view.fragments.Profile"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profile_to_homePage"
+            app:destination="@id/homePage" />
+    </fragment>
 </navigation>

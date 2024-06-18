@@ -23,6 +23,10 @@ class Login : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.linkCrearCuenta.setOnClickListener {
+            val intent = Intent(this, Register::class.java)
+            startActivity(intent)
+        }
 
         /***Dependencias para el login de usuario***/
         // instancia de Retrofit que está configurada para comunicarse con la API.
@@ -74,7 +78,7 @@ class Login : AppCompatActivity() {
             result.onSuccess { response ->
                 val user = response.body()
                 user?.let {
-                    SharedPreferencesHelper.saveConnectedUser( this, it)
+                    SharedPreferencesHelper.saveConnectedUser(this, it)
                 }
             }
             result.onFailure {
