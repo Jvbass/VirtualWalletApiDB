@@ -1,13 +1,14 @@
-package cl.jpinodev.virtualwalletapidb.data.local.Dao
+package cl.jpinodev.virtualwalletapidb.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import cl.jpinodev.virtualwalletapidb.data.model.entities.Accounts
 
 @Dao
 interface AccountDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAccount(account: Accounts)
 
     @Query("SELECT * FROM accounts WHERE userId = :userId")

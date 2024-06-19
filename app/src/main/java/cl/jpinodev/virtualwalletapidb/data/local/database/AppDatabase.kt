@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import cl.jpinodev.virtualwalletapidb.data.local.Dao.AccountDao
-import cl.jpinodev.virtualwalletapidb.data.local.Dao.TransactionDao
-import cl.jpinodev.virtualwalletapidb.data.local.Dao.UserDao
+import cl.jpinodev.virtualwalletapidb.data.local.dao.AccountDao
+import cl.jpinodev.virtualwalletapidb.data.local.dao.TransactionDao
+import cl.jpinodev.virtualwalletapidb.data.local.dao.UserDao
 import cl.jpinodev.virtualwalletapidb.data.model.entities.Accounts
 import cl.jpinodev.virtualwalletapidb.data.model.entities.Transactions
 import cl.jpinodev.virtualwalletapidb.data.model.entities.Users

@@ -1,5 +1,6 @@
 package cl.jpinodev.virtualwalletapidb.data.repository
 
+import cl.jpinodev.virtualwalletapidb.data.local.dao.UserDao
 import cl.jpinodev.virtualwalletapidb.data.model.apientities.LoginRequest
 import cl.jpinodev.virtualwalletapidb.data.model.apientities.LoginResponse
 import cl.jpinodev.virtualwalletapidb.data.model.entities.Users
@@ -13,7 +14,8 @@ import retrofit2.Response
 *  o base de datos (usando Room).
 * Esto permite cambiar la implementacion de acceso a datos sin afectar al resto de la app
 * */
-class UsersRepositoryImpl(private val userService: UserApiService): UsersRepository {
+class UsersRepositoryImpl(private val userService: UserApiService, private val userDao: UserDao) :
+    UsersRepository {
     // funcion suspendida en el hilo IO, envia el usuario al servicio
     override suspend fun createUser(user: Users): Response<Users> {
         return withContext(Dispatchers.IO) {
@@ -30,6 +32,21 @@ class UsersRepositoryImpl(private val userService: UserApiService): UsersReposit
     override suspend fun getConnectedUser(token: String): Response<Users> {
         return withContext(Dispatchers.IO) {
             userService.getConnectedUser(token)
+        }
+    }
+
+    /*
+    * Implementacion db
+    * */
+    override suspend fun saveUserOnDb(user: Users) {
+        return withContext(Dispatchers.IO) {
+            userDao.insertUser(user)
+        }
+    }
+
+    override suspend fun getUserByIdFromDb(id: Int): Users? {
+        return withContext(Dispatchers.IO) {
+            userDao.getUserById(id)
         }
     }
 }

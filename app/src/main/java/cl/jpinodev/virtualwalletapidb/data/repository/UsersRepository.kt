@@ -12,4 +12,10 @@ interface UsersRepository {
 
     suspend fun getConnectedUser(token: String): Response<Users>
 
+
+    /*implementacion daos*/
+
+    suspend fun saveUserOnDb(user: Users)
+    suspend fun getUserByIdFromDb(id: Int): Users?
+
 }
