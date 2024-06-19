@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import cl.jpinodev.virtualwalletapidb.data.model.entities.Users
+import cl.jpinodev.virtualwalletapidb.data.model.apientities.UsersResponse
 import cl.jpinodev.virtualwalletapidb.data.network.api.UserApiService
 import cl.jpinodev.virtualwalletapidb.data.network.retrofit.RetrofitHelper
 import cl.jpinodev.virtualwalletapidb.data.repository.UsersRepositoryImpl
@@ -63,7 +63,7 @@ class Register : AppCompatActivity() {
                 ToastUtils.showCustomToast(this, "Las contraseñas no coinciden")
             } else {
                 //creamos nuevo usuario con los datos ingresados
-                val newUser = Users(
+                val newUser = UsersResponse(
                     id = 0,
                     firstName = nombre,
                     lastName = apellido,

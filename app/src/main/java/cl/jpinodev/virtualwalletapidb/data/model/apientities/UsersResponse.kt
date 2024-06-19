@@ -1,8 +1,8 @@
-package cl.jpinodev.virtualwalletapidb.data.model.entities
+package cl.jpinodev.virtualwalletapidb.data.model.apientities
 
 import com.google.gson.annotations.SerializedName
 
-data class Users(
+data class UsersResponse(
     val id: Int,
     @SerializedName("first_name")
     val firstName: String,

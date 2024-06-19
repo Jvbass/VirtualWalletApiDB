@@ -100,7 +100,7 @@ class HomePage : Fragment() {
         }
 
         // Observar los cambios en ownAccountsLD
-        accountsViewModel.ownAccountsLD.observe(viewLifecycleOwner, Observer { result ->
+        accountsViewModel.ownAccountsLDResponse.observe(viewLifecycleOwner, Observer { result ->
             result.onSuccess { response ->
                 Log.i("HomePage", response.body().toString())
 

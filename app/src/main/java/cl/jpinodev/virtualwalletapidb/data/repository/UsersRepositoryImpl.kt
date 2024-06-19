@@ -2,7 +2,7 @@ package cl.jpinodev.virtualwalletapidb.data.repository
 
 import cl.jpinodev.virtualwalletapidb.data.model.apientities.LoginRequest
 import cl.jpinodev.virtualwalletapidb.data.model.apientities.LoginResponse
-import cl.jpinodev.virtualwalletapidb.data.model.entities.Users
+import cl.jpinodev.virtualwalletapidb.data.model.apientities.UsersResponse
 import cl.jpinodev.virtualwalletapidb.data.network.api.UserApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -15,7 +15,7 @@ import retrofit2.Response
 * */
 class UsersRepositoryImpl(private val userService: UserApiService): UsersRepository {
     // funcion suspendida en el hilo IO, envia el usuario al servicio
-    override suspend fun createUser(user: Users): Response<Users> {
+    override suspend fun createUser(user: UsersResponse): Response<UsersResponse> {
         return withContext(Dispatchers.IO) {
             userService.createUser(user)
         }
@@ -27,7 +27,7 @@ class UsersRepositoryImpl(private val userService: UserApiService): UsersReposit
         }
     }
 
-    override suspend fun getConnectedUser(token: String): Response<Users> {
+    override suspend fun getConnectedUser(token: String): Response<UsersResponse> {
         return withContext(Dispatchers.IO) {
             userService.getConnectedUser(token)
         }

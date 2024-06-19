@@ -1,6 +1,6 @@
-package cl.jpinodev.virtualwalletapidb.data.model.entities
+package cl.jpinodev.virtualwalletapidb.data.model.apientities
 
-data class Accounts(
+data class AccountsResponse(
     val id: Int,
     val creationDate: String,
     val money: Int = 6000,

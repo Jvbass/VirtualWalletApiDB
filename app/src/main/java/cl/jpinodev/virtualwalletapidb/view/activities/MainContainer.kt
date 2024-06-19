@@ -2,7 +2,9 @@ package cl.jpinodev.virtualwalletapidb.view.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import cl.jpinodev.virtualwalletapidb.data.appdata.SharedPreferencesHelper
 import cl.jpinodev.virtualwalletapidb.databinding.ActivityMainContainerBinding
 
@@ -15,16 +17,8 @@ class MainContainer : AppCompatActivity() {
         setContentView(binding.root)
     }
 
-    override fun onDestroy() {
+   override fun onDestroy() {
         super.onDestroy()
         SharedPreferencesHelper.clearAll(this)
-
     }
-    /*override fun onBackPressed() {
-        SharedPreferencesHelper.clearAll(this)
-        val intent = Intent(this, Login::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-        finish() // Llama a finish() para cerrar MainContainer
-    }*/
 }

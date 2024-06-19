@@ -6,22 +6,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cl.jpinodev.virtualwalletapidb.data.model.apientities.OperationRequest
 import cl.jpinodev.virtualwalletapidb.data.model.apientities.OperationResponse
-import cl.jpinodev.virtualwalletapidb.data.model.entities.Accounts
+import cl.jpinodev.virtualwalletapidb.data.model.apientities.AccountsResponse
 import cl.jpinodev.virtualwalletapidb.domain.AccountsUseCase
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
 class AccountsViewModel(private val accountUseCase: AccountsUseCase) : ViewModel() {
-    private val _accountLD = MutableLiveData<Result<Response<Accounts>>>()
-    private val _ownAccountsLD = MutableLiveData<Result<Response<List<Accounts>>>>()
+    private val _accountLD = MutableLiveData<Result<Response<AccountsResponse>>>()
+    private val _ownAccountsLDResponse = MutableLiveData<Result<Response<List<AccountsResponse>>>>()
     private val _operationLD = MutableLiveData<Result<Response<OperationResponse>>>()
 
 
-    val accountLD: LiveData<Result<Response<Accounts>>> = _accountLD
-    val ownAccountsLD: LiveData<Result<Response<List<Accounts>>>> = _ownAccountsLD
+    val accountLD: LiveData<Result<Response<AccountsResponse>>> = _accountLD
+    val ownAccountsLDResponse: LiveData<Result<Response<List<AccountsResponse>>>> = _ownAccountsLDResponse
     val operationLD: LiveData<Result<Response<OperationResponse>>> = _operationLD
 
-    fun createAccount(token: String, account: Accounts) {
+    fun createAccount(token: String, account: AccountsResponse) {
         viewModelScope.launch {
             try {
                 val response = accountUseCase.createAccount(token, account)
@@ -36,9 +36,9 @@ class AccountsViewModel(private val accountUseCase: AccountsUseCase) : ViewModel
         viewModelScope.launch {
             try {
                 val response = accountUseCase.getOwnAccounts(token)
-                _ownAccountsLD.postValue(Result.success(response))
+                _ownAccountsLDResponse.postValue(Result.success(response))
             } catch (e: Exception) {
-                _ownAccountsLD.postValue(null)
+                _ownAccountsLDResponse.postValue(null)
             }
         }
     }

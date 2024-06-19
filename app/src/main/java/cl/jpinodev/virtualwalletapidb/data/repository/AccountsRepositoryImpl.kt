@@ -2,7 +2,7 @@ package cl.jpinodev.virtualwalletapidb.data.repository
 
 import cl.jpinodev.virtualwalletapidb.data.model.apientities.OperationRequest
 import cl.jpinodev.virtualwalletapidb.data.model.apientities.OperationResponse
-import cl.jpinodev.virtualwalletapidb.data.model.entities.Accounts
+import cl.jpinodev.virtualwalletapidb.data.model.apientities.AccountsResponse
 import cl.jpinodev.virtualwalletapidb.data.network.api.AccountApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -10,13 +10,13 @@ import retrofit2.Response
 
 class AccountsRepositoryImpl(private val accountService: AccountApiService):
     AccountsRepository {
-    override suspend fun getOwnAccounts(token: String): Response<List<Accounts>> {
+    override suspend fun getOwnAccounts(token: String): Response<List<AccountsResponse>> {
         return withContext(Dispatchers.IO) {
             accountService.getOwnAccounts(token)
         }
     }
 
-    override suspend fun createAccount(token: String, account: Accounts): Response<Accounts> {
+    override suspend fun createAccount(token: String, account: AccountsResponse): Response<AccountsResponse> {
         return withContext(Dispatchers.IO) {
             accountService.createAccount(token,account)
         }

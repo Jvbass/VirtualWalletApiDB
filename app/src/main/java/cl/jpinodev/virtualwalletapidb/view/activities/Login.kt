@@ -23,6 +23,8 @@ class Login : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        SharedPreferencesHelper.clearAll(this)
+
         binding.linkCrearCuenta.setOnClickListener {
             val intent = Intent(this, Register::class.java)
             startActivity(intent)

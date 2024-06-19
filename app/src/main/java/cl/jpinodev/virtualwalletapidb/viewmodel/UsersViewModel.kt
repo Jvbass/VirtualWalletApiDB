@@ -7,22 +7,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cl.jpinodev.virtualwalletapidb.data.model.apientities.LoginRequest
 import cl.jpinodev.virtualwalletapidb.data.model.apientities.LoginResponse
-import cl.jpinodev.virtualwalletapidb.data.model.entities.Users
+import cl.jpinodev.virtualwalletapidb.data.model.apientities.UsersResponse
 import cl.jpinodev.virtualwalletapidb.domain.UsersUseCase
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
 class UsersViewModel(private val usersUseCase: UsersUseCase) : ViewModel() {
-    private val _userLD = MutableLiveData<Result<Response<Users>>>()
+    private val _userLD = MutableLiveData<Result<Response<UsersResponse>>>()
     private val _loginLD = MutableLiveData<Result<Response<LoginResponse>>>()
-    private val _connectedUserLD = MutableLiveData<Result<Response<Users>>>()
+    private val _connectedUserLD = MutableLiveData<Result<Response<UsersResponse>>>()
 
-    val userLD: LiveData<Result<Response<Users>>> = _userLD
+    val userLD: LiveData<Result<Response<UsersResponse>>> = _userLD
     val loginLD: LiveData<Result<Response<LoginResponse>>> = _loginLD
-    val connectedUserLD: LiveData<Result<Response<Users>>> = _connectedUserLD
+    val connectedUserLD: LiveData<Result<Response<UsersResponse>>> = _connectedUserLD
 
     // metodo para crear un usuario
-    fun createUser(user: Users) {
+    fun createUser(user: UsersResponse) {
         viewModelScope.launch {
             try {
                 // llamada al usecase pasamos el usuario recibido desde la vista

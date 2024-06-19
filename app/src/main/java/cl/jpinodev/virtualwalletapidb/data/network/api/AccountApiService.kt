@@ -2,7 +2,7 @@ package cl.jpinodev.virtualwalletapidb.data.network.api
 
 import cl.jpinodev.virtualwalletapidb.data.model.apientities.OperationRequest
 import cl.jpinodev.virtualwalletapidb.data.model.apientities.OperationResponse
-import cl.jpinodev.virtualwalletapidb.data.model.entities.Accounts
+import cl.jpinodev.virtualwalletapidb.data.model.apientities.AccountsResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -14,12 +14,12 @@ interface AccountApiService {
         //obtener las cuentas del usuario
         @GET("accounts/me")
         suspend fun getOwnAccounts(@Header("Authorization") token: String)
-        : Response<List<Accounts>>
+        : Response<List<AccountsResponse>>
 
         //crear una cuenta
         @POST("accounts")
-        suspend fun createAccount(@Header("Authorization") token: String,@Body account: Accounts)
-        : Response<Accounts>
+        suspend fun createAccount(@Header("Authorization") token: String,@Body account: AccountsResponse)
+        : Response<AccountsResponse>
 
         @POST("accounts/{id}")
         suspend fun sendDepositMoney(
