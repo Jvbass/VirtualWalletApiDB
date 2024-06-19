@@ -1,7 +1,32 @@
 package cl.jpinodev.virtualwalletapidb.data.model.entities
 
+import android.accounts.Account
+import androidx.room.Entity
+import androidx.room.ForeignKey
 import com.google.gson.annotations.SerializedName
 
+@Entity(
+    tableName = "transactions",
+    foreignKeys = [
+        ForeignKey(
+            entity = Account::class,
+            parentColumns = ["id"],
+            childColumns = ["accountId"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = Account::class,
+            parentColumns = ["id"],
+            childColumns = ["toAccountId"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = Users::class,
+            parentColumns = ["id"],
+            childColumns = ["userId"],
+            onDelete = ForeignKey.CASCADE
+        )]
+)
 data class Transactions(
     val id: Int,
     val amount: String,
