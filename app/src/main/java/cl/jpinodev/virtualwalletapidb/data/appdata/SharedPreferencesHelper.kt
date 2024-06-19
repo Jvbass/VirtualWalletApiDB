@@ -2,8 +2,8 @@ package cl.jpinodev.virtualwalletapidb.data.appdata
 
 import android.content.Context
 import android.content.SharedPreferences
-import cl.jpinodev.virtualwalletapidb.data.model.apientities.AccountsResponse
-import cl.jpinodev.virtualwalletapidb.data.model.apientities.UsersResponse
+import cl.jpinodev.virtualwalletapidb.data.model.entities.Accounts
+import cl.jpinodev.virtualwalletapidb.data.model.entities.Users
 import com.google.gson.Gson
 
 object SharedPreferencesHelper {
@@ -26,33 +26,33 @@ object SharedPreferencesHelper {
         return getSharedPreferences(context).getString(TOKEN, null)
     }
 
-    fun saveConnectedUser(context: Context, user: UsersResponse) {
+    fun saveConnectedUser(context: Context, user: Users) {
         val editor = getSharedPreferences(context).edit()
         val userJson = Gson().toJson(user)
         editor.putString(CONNECTED_USER, userJson)
         editor.apply()
     }
 
-    fun getConnectedUser(context: Context): UsersResponse? {
+    fun getConnectedUser(context: Context): Users? {
         val userJson = getSharedPreferences(context).getString(CONNECTED_USER, null)
         return if (userJson != null) {
-            Gson().fromJson(userJson, UsersResponse::class.java)
+            Gson().fromJson(userJson, Users::class.java)
         } else {
             null
         }
     }
 
-    fun saveAccount(context: Context, account: AccountsResponse) {
+    fun saveAccount(context: Context, account: Accounts) {
         val editor = getSharedPreferences(context).edit()
         val json = Gson().toJson(account)
         editor.putString(CONNECTED_ACCOUNT, json)
         editor.apply()
     }
 
-    fun getAccount(context: Context): AccountsResponse? {
+    fun getAccount(context: Context): Accounts? {
         val json = getSharedPreferences(context).getString(CONNECTED_ACCOUNT, null)
         return if (json != null) {
-            Gson().fromJson(json, AccountsResponse::class.java)
+            Gson().fromJson(json, Accounts::class.java)
         } else {
             null
         }

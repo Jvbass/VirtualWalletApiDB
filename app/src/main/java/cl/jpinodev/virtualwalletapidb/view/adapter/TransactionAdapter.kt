@@ -4,12 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import cl.jpinodev.virtualwalletapidb.R
-import cl.jpinodev.virtualwalletapidb.data.model.apientities.TransactionsResponse
+import cl.jpinodev.virtualwalletapidb.data.model.entities.Transactions
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class TransactionAdapter(private val transactions: List<TransactionsResponse>) :
+class TransactionAdapter(private val transactions: List<Transactions>) :
     RecyclerView.Adapter<TransactionViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {

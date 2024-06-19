@@ -1,8 +1,8 @@
-package cl.jpinodev.virtualwalletapidb.data.model.apientities
+package cl.jpinodev.virtualwalletapidb.data.model.entities
 
 import com.google.gson.annotations.SerializedName
 
-data class TransactionsResponse(
+data class Transactions(
     val id: Int,
     val amount: String,
     val concept: String,
