@@ -14,12 +14,12 @@ import retrofit2.Response
 
 class AccountsViewModel(private val accountUseCase: AccountsUseCase) : ViewModel() {
     private val _accountLD = MutableLiveData<Result<Response<Accounts>>>()
-    private val _ownAccountsLD = MutableLiveData<Result<Response<List<Accounts>>>>()
+    private val _ownAccountsLD = MutableLiveData<Result<Response<List<Accounts>>>?>()
     private val _operationLD = MutableLiveData<Result<Response<OperationResponse>>>()
 
 
     val accountLD: LiveData<Result<Response<Accounts>>> = _accountLD
-    val ownAccountsLD: LiveData<Result<Response<List<Accounts>>>> = _ownAccountsLD
+    val ownAccountsLD: MutableLiveData<Result<Response<List<Accounts>>>?> = _ownAccountsLD
     val operationLD: LiveData<Result<Response<OperationResponse>>> = _operationLD
 
     fun createAccount(token: String, account: AccountRequest) {

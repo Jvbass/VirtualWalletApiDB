@@ -1,6 +1,5 @@
 package cl.jpinodev.virtualwalletapidb.view.activities
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import cl.jpinodev.virtualwalletapidb.data.appdata.SharedPreferencesHelper

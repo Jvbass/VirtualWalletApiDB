@@ -1,6 +1,5 @@
 package cl.jpinodev.virtualwalletapidb.view.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import cl.jpinodev.virtualwalletapidb.R
 import cl.jpinodev.virtualwalletapidb.data.appdata.SharedPreferencesHelper
 import cl.jpinodev.virtualwalletapidb.data.model.apientities.AccountRequest
-import cl.jpinodev.virtualwalletapidb.data.model.entities.Accounts
 import cl.jpinodev.virtualwalletapidb.data.network.api.AccountApiService
 import cl.jpinodev.virtualwalletapidb.data.network.api.TransactionApiService
 import cl.jpinodev.virtualwalletapidb.data.network.retrofit.RetrofitHelper
@@ -23,7 +21,6 @@ import cl.jpinodev.virtualwalletapidb.data.repository.TransactionsRepositoryImpl
 import cl.jpinodev.virtualwalletapidb.databinding.FragmentHomePageBinding
 import cl.jpinodev.virtualwalletapidb.domain.AccountsUseCase
 import cl.jpinodev.virtualwalletapidb.domain.TransactionsUseCase
-import cl.jpinodev.virtualwalletapidb.view.activities.Login
 import cl.jpinodev.virtualwalletapidb.view.adapter.TransactionAdapter
 import cl.jpinodev.virtualwalletapidb.view.utils.ToastUtils
 import cl.jpinodev.virtualwalletapidb.viewmodel.AccountsViewModel
@@ -57,8 +54,8 @@ class HomePage : Fragment() {
         //config accountsViewmodel
         val accountService: AccountApiService =
             RetrofitHelper.getRetrofit().create(AccountApiService::class.java)
-        val accountRepository: AccountsRepositoryImpl = AccountsRepositoryImpl(accountService)
-        val accountUseCase: AccountsUseCase = AccountsUseCase(accountRepository)
+        val accountRepository = AccountsRepositoryImpl(accountService)
+        val accountUseCase = AccountsUseCase(accountRepository)
         val factoryAccounts = AccountsViewModelFactory(accountUseCase)
 
         accountsViewModel = ViewModelProvider(this, factoryAccounts)[AccountsViewModel::class.java]
@@ -66,9 +63,9 @@ class HomePage : Fragment() {
         //config transactionViewmodel
         val transactionService: TransactionApiService =
             RetrofitHelper.getRetrofit().create(TransactionApiService::class.java)
-        val transactionsRepository: TransactionsRepositoryImpl =
+        val transactionsRepository =
             TransactionsRepositoryImpl(transactionService)
-        val transactionsUseCase: TransactionsUseCase = TransactionsUseCase(transactionsRepository)
+        val transactionsUseCase = TransactionsUseCase(transactionsRepository)
         val factoryTransactions = TransactionsViewModelFactory(transactionsUseCase)
         transactionsViewModel =
             ViewModelProvider(this, factoryTransactions)[TransactionsViewModel::class.java]
