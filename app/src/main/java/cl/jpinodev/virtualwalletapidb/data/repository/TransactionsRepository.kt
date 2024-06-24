@@ -6,10 +6,10 @@ import retrofit2.Response
 
 interface TransactionsRepository {
     suspend fun getTransactions(token: String): Response<TransactionResponse>
-
+/*
     /*implementacion daos*/
     suspend fun saveTransactionsOnDb(transaction: Transactions)
 
     suspend fun getTransactionsByAccountIdFromDb(accountId: Int): List<Transactions>
-
+*/
 }

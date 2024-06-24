@@ -13,9 +13,9 @@ interface AccountsRepository {
             Response<OperationResponse>
 
     /*implementacion daos*/
-
+/*
     suspend fun saveAccountOnDb(account: Accounts)
 
-    suspend fun getAccountsByUserFromDb(userId: Int): List<Accounts>
+    suspend fun getAccountsByUserFromDb(userId: Int): List<Accounts>*/
 
 }

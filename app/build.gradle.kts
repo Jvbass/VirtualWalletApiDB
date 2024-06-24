@@ -65,10 +65,16 @@ dependencies {
     implementation("androidx.room:room-ktx:$room_version")
     ksp("androidx.room:room-compiler:$room_version")
 
+    //test para la db
+    testImplementation("androidx.room:room-testing:$room_version")
+
+
     val nav_version = "2.7.7"
 // navigation component
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+//bcrypt
+    implementation (libs.bcrypt)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

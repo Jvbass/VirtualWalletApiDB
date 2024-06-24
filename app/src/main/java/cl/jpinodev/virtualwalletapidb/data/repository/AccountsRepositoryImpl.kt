@@ -10,8 +10,8 @@ import kotlinx.coroutines.withContext
 import retrofit2.Response
 
 class AccountsRepositoryImpl(
-    private val accountService: AccountApiService,
-    private val accountDao: AccountDao
+    private val accountService: AccountApiService,/*
+    private val accountDao: AccountDao*/
 ) :
     AccountsRepository {
     override suspend fun getOwnAccounts(token: String): Response<List<Accounts>> {
@@ -36,7 +36,7 @@ class AccountsRepositoryImpl(
         }
     }
 
-
+/*
     /*Implementacion db*/
     override suspend fun saveAccountOnDb(account: Accounts) {
         return withContext(Dispatchers.IO) {
@@ -48,5 +48,5 @@ class AccountsRepositoryImpl(
         return withContext(Dispatchers.IO) {
             accountDao.getAccountsByUserId(userId)
         }
-    }
+    }*/
 }

@@ -12,7 +12,7 @@ data class Users(
     val firstName: String,
     @SerializedName("last_name")
     val lastName: String,
-    val email: String,
+    val email: String ,
     val password: String,
     val points: Int = 800,
     val roleId: Int = 1,

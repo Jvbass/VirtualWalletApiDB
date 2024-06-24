@@ -19,4 +19,17 @@ class UsersUseCase(private val repository: UsersRepository) {
     suspend fun getConnectedUser(token: String): Response<Users> {
         return repository.getConnectedUser(token)
     }
+
+    /*use case para la DB*/
+    suspend fun saveUserOnDb(user: Users) {
+        return repository.saveUserOnDb(user)
+    }
+
+    suspend fun getUserByIdFromDb(id: Int): Users? {
+        return repository.getUserByIdFromDb(id)
+    }
+
+    suspend fun loginUserFromDb(email: String, password: String): Response<LoginResponse>{
+        return repository.loginUserFromDb(email, password)
+    }
 }
