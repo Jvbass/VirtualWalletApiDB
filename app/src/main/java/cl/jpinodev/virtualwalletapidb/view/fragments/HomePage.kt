@@ -135,7 +135,7 @@ class HomePage : Fragment() {
         /*****ViewModel Observers*****/
         // cambios en ownAccountsLD
         accountsViewModel.ownAccountsLD.observe(viewLifecycleOwner, Observer { result ->
-            result.onSuccess { response ->
+            result?.onSuccess { response ->
                 Log.i("HomePage", response.body().toString())
 
                 val accounts = response.body()
@@ -155,7 +155,7 @@ class HomePage : Fragment() {
                     binding.accountResume.visibility = View.GONE
                 }
             }
-            result.onFailure {
+            result?.onFailure {
                 ToastUtils.showCustomToast(
                     requireContext(),
                     "Error al obtener cuentas: ${it.message}"
