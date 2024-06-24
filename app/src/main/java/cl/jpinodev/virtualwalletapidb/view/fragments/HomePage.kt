@@ -38,7 +38,6 @@ class HomePage : Fragment() {
     private lateinit var binding: FragmentHomePageBinding
     private lateinit var accountsViewModel: AccountsViewModel
 
-    //feature transaction
     private lateinit var transactionsViewModel: TransactionsViewModel
     private lateinit var transactionAdapter: TransactionAdapter
 
@@ -65,7 +64,6 @@ class HomePage : Fragment() {
         accountsViewModel = ViewModelProvider(this, factoryAccounts)[AccountsViewModel::class.java]
 
         //config transactionViewmodel
-        // Configurar TransactionsViewModel
         val transactionService: TransactionApiService =
             RetrofitHelper.getRetrofit().create(TransactionApiService::class.java)
         val transactionsRepository: TransactionsRepositoryImpl =
@@ -80,12 +78,21 @@ class HomePage : Fragment() {
         transactionAdapter = TransactionAdapter(emptyList())
         binding.recyclerTransactionList.adapter = transactionAdapter
 
+        // llamadas a SharedPreferences
         val user = SharedPreferencesHelper.getConnectedUser(requireContext())
         user?.let {
             val fullName = "${it.firstName} ${it.lastName}"
             binding.fullName.text = fullName
         }
 
+        val token = SharedPreferencesHelper.getToken(requireContext())
+        Log.i("HomePage", token.toString())
+        token?.let {
+            accountsViewModel.getOwnAccounts("Bearer $token")
+            transactionsViewModel.getTransactions("Bearer $token")
+        }
+
+        // navegacion botones y enlaces
         val navController = Navigation.findNavController(view)
         binding.btnSend.setOnClickListener {
             navController.navigate(R.id.transactionSend)
@@ -93,17 +100,8 @@ class HomePage : Fragment() {
         binding.btnRequest.setOnClickListener {
             navController.navigate(R.id.transactionReceive)
         }
-
         binding.profileImage.setOnClickListener {
             navController.navigate(R.id.profile)
-        }
-
-
-        val token = SharedPreferencesHelper.getToken(requireContext())
-        Log.i("HomePage", token.toString())
-        token?.let {
-            accountsViewModel.getOwnAccounts("Bearer $token")
-            transactionsViewModel.getTransactions("Bearer $token")
         }
 
         // BTN crear cuenta
@@ -113,18 +111,25 @@ class HomePage : Fragment() {
                 val currentDate =
                     SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
                 val newAccount = AccountRequest(
-                    creationDate = "currentDate",
+                    creationDate = currentDate,
                     money = 6000,
                     isBlocked = false,
                     userId = 1
                 )
-                ToastUtils.showCustomToast(
-                    requireContext(),
-                    "Cuenta creada con éxito, Vuelve a ingresar"
-                )
-                val intent = Intent(requireContext(), Login::class.java)
-                startActivity(intent)
+                accountsViewModel.createAccount("Bearer $token", newAccount)
 
+                // observer para observar cuenta creada
+                accountsViewModel.accountLD.observe(viewLifecycleOwner, Observer { result ->
+                    result.onSuccess { response ->
+                        ToastUtils.showCustomToast(requireContext(), "Cuenta creada con éxito")
+                    }
+                    result.onFailure {
+                        ToastUtils.showCustomToast(
+                            requireContext(),
+                            "Error al crear cuenta: ${it.message}"
+                        )
+                    }
+                })
             } else {
                 ToastUtils.showCustomToast(requireContext(), "No es posible crear una cuenta")
             }
@@ -167,18 +172,27 @@ class HomePage : Fragment() {
             result.onSuccess { response ->
                 val transactions = response.body()?.data
                 transactions?.let {
-                    transactionAdapter = TransactionAdapter(it)
-                    binding.recyclerTransactionList.adapter = transactionAdapter
+                    if (transactions.isEmpty()) {
+                        binding.emptyTransactionList.visibility = View.VISIBLE
+                        binding.recyclerTransactionList.visibility = View.GONE
+                    } else {
+                        transactionAdapter = TransactionAdapter(it)
+                        binding.recyclerTransactionList.adapter = transactionAdapter
+                        binding.emptyTransactionList.visibility = View.GONE
+                        binding.recyclerTransactionList.visibility = View.VISIBLE
+                    }
                 }
             }
             result.onFailure {
+                binding.emptyTransactionList.visibility = View.VISIBLE
                 ToastUtils.showCustomToast(
                     requireContext(),
                     "Error al obtener transacciones: ${it.message}"
                 )
             }
         })
-        accountsViewModel.accountLD.observe(viewLifecycleOwner, Observer { result ->
+
+       accountsViewModel.accountLD.observe(viewLifecycleOwner, Observer { result ->
             result.onSuccess { response ->
                 val account = response.body()
                 account?.let {

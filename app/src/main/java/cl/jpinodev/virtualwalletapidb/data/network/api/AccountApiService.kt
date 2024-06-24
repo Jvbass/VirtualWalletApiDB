@@ -12,20 +12,20 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface AccountApiService {
-        //obtener las cuentas del usuario
-        @GET("accounts/me")
-        suspend fun getOwnAccounts(@Header("Authorization") token: String)
-        : Response<List<Accounts>>
+    //obtener las cuentas del usuario
+    @GET("accounts/me")
+    suspend fun getOwnAccounts(@Header("Authorization") token: String)
+            : Response<List<Accounts>>
 
-        //crear una cuenta
-        @POST("accounts")
-        suspend fun createAccount(@Header("Authorization") token: String,@Body account: AccountRequest)
-        : Response<Accounts>
+    //crear una cuenta
+    @POST("accounts")
+    suspend fun createAccount(@Header("Authorization") token: String, @Body account: AccountRequest)
+            : Response<Accounts>
 
-        @POST("accounts/{id}")
-        suspend fun sendDepositMoney(
-                @Path("id") accountId: Int,
-                @Header("Authorization") token: String,
-                @Body request: OperationRequest
-        ): Response<OperationResponse>
+    @POST("accounts/{id}")
+    suspend fun sendDepositMoney(
+        @Path("id") accountId: Int,
+        @Header("Authorization") token: String,
+        @Body request: OperationRequest
+    ): Response<OperationResponse>
 }

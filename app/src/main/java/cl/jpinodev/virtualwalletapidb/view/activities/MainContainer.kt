@@ -18,7 +18,6 @@ class MainContainer : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         SharedPreferencesHelper.clearAll(this)
-
     }
     /*override fun onBackPressed() {
         SharedPreferencesHelper.clearAll(this)
