@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cl.jpinodev.virtualwalletapidb.data.model.apientities.AccountRequest
 import cl.jpinodev.virtualwalletapidb.data.model.apientities.OperationRequest
 import cl.jpinodev.virtualwalletapidb.data.model.apientities.OperationResponse
 import cl.jpinodev.virtualwalletapidb.data.model.entities.Accounts
@@ -21,7 +22,7 @@ class AccountsViewModel(private val accountUseCase: AccountsUseCase) : ViewModel
     val ownAccountsLD: LiveData<Result<Response<List<Accounts>>>> = _ownAccountsLD
     val operationLD: LiveData<Result<Response<OperationResponse>>> = _operationLD
 
-    fun createAccount(token: String, account: Accounts) {
+    fun createAccount(token: String, account: AccountRequest) {
         viewModelScope.launch {
             try {
                 val response = accountUseCase.createAccount(token, account)

@@ -1,5 +1,6 @@
 package cl.jpinodev.virtualwalletapidb.data.repository
 
+import cl.jpinodev.virtualwalletapidb.data.model.apientities.AccountRequest
 import cl.jpinodev.virtualwalletapidb.data.model.apientities.OperationRequest
 import cl.jpinodev.virtualwalletapidb.data.model.apientities.OperationResponse
 import cl.jpinodev.virtualwalletapidb.data.model.entities.Accounts
@@ -16,7 +17,7 @@ class AccountsRepositoryImpl(private val accountService: AccountApiService):
         }
     }
 
-    override suspend fun createAccount(token: String, account: Accounts): Response<Accounts> {
+    override suspend fun createAccount(token: String, account: AccountRequest): Response<Accounts> {
         return withContext(Dispatchers.IO) {
             accountService.createAccount(token,account)
         }

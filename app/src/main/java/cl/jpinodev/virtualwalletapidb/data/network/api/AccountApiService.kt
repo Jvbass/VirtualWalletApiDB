@@ -1,5 +1,6 @@
 package cl.jpinodev.virtualwalletapidb.data.network.api
 
+import cl.jpinodev.virtualwalletapidb.data.model.apientities.AccountRequest
 import cl.jpinodev.virtualwalletapidb.data.model.apientities.OperationRequest
 import cl.jpinodev.virtualwalletapidb.data.model.apientities.OperationResponse
 import cl.jpinodev.virtualwalletapidb.data.model.entities.Accounts
@@ -18,7 +19,7 @@ interface AccountApiService {
 
         //crear una cuenta
         @POST("accounts")
-        suspend fun createAccount(@Header("Authorization") token: String,@Body account: Accounts)
+        suspend fun createAccount(@Header("Authorization") token: String,@Body account: AccountRequest)
         : Response<Accounts>
 
         @POST("accounts/{id}")

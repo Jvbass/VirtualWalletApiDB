@@ -1,5 +1,6 @@
 package cl.jpinodev.virtualwalletapidb.view.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +13,8 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import cl.jpinodev.virtualwalletapidb.R
 import cl.jpinodev.virtualwalletapidb.data.appdata.SharedPreferencesHelper
+import cl.jpinodev.virtualwalletapidb.data.model.apientities.AccountRequest
+import cl.jpinodev.virtualwalletapidb.data.model.entities.Accounts
 import cl.jpinodev.virtualwalletapidb.data.network.api.AccountApiService
 import cl.jpinodev.virtualwalletapidb.data.network.api.TransactionApiService
 import cl.jpinodev.virtualwalletapidb.data.network.retrofit.RetrofitHelper
@@ -20,12 +23,16 @@ import cl.jpinodev.virtualwalletapidb.data.repository.TransactionsRepositoryImpl
 import cl.jpinodev.virtualwalletapidb.databinding.FragmentHomePageBinding
 import cl.jpinodev.virtualwalletapidb.domain.AccountsUseCase
 import cl.jpinodev.virtualwalletapidb.domain.TransactionsUseCase
+import cl.jpinodev.virtualwalletapidb.view.activities.Login
 import cl.jpinodev.virtualwalletapidb.view.adapter.TransactionAdapter
 import cl.jpinodev.virtualwalletapidb.view.utils.ToastUtils
 import cl.jpinodev.virtualwalletapidb.viewmodel.AccountsViewModel
 import cl.jpinodev.virtualwalletapidb.viewmodel.AccountsViewModelFactory
 import cl.jpinodev.virtualwalletapidb.viewmodel.TransactionsViewModel
 import cl.jpinodev.virtualwalletapidb.viewmodel.TransactionsViewModelFactory
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class HomePage : Fragment() {
     private lateinit var binding: FragmentHomePageBinding
@@ -99,7 +106,32 @@ class HomePage : Fragment() {
             transactionsViewModel.getTransactions("Bearer $token")
         }
 
-        // Observar los cambios en ownAccountsLD
+        // BTN crear cuenta
+        binding.btnCreateAccount.setOnClickListener {
+            val token = SharedPreferencesHelper.getToken(requireContext())
+            if (token != null) {
+                val currentDate =
+                    SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+                val newAccount = AccountRequest(
+                    creationDate = "currentDate",
+                    money = 6000,
+                    isBlocked = false,
+                    userId = 1
+                )
+                ToastUtils.showCustomToast(
+                    requireContext(),
+                    "Cuenta creada con éxito, Vuelve a ingresar"
+                )
+                val intent = Intent(requireContext(), Login::class.java)
+                startActivity(intent)
+
+            } else {
+                ToastUtils.showCustomToast(requireContext(), "No es posible crear una cuenta")
+            }
+        }
+
+        /*****ViewModel Observers*****/
+        // cambios en ownAccountsLD
         accountsViewModel.ownAccountsLD.observe(viewLifecycleOwner, Observer { result ->
             result.onSuccess { response ->
                 Log.i("HomePage", response.body().toString())
@@ -117,7 +149,6 @@ class HomePage : Fragment() {
                     binding.balanceAmount.text = account.money.toString()
 
                 } else {
-
                     binding.btnCreateAccount.visibility = View.VISIBLE
                     binding.accountResume.visibility = View.GONE
                 }
@@ -131,7 +162,7 @@ class HomePage : Fragment() {
             }
         })
 
-        //observar los cambios en transactionsLD
+        //cambios transactionsLD
         transactionsViewModel.transactionsLD.observe(viewLifecycleOwner, Observer { result ->
             result.onSuccess { response ->
                 val transactions = response.body()?.data
@@ -147,5 +178,25 @@ class HomePage : Fragment() {
                 )
             }
         })
-    }
-}
+        accountsViewModel.accountLD.observe(viewLifecycleOwner, Observer { result ->
+            result.onSuccess { response ->
+                val account = response.body()
+                account?.let {
+                    SharedPreferencesHelper.saveAccount(requireContext(), it)
+                    binding.accountResume.visibility = View.VISIBLE
+                    binding.btnCreateAccount.visibility = View.GONE
+
+                    binding.accountNumber.text = it.id.toString()
+                    binding.balanceAmount.text = it.money.toString()
+                }
+            }
+            result.onFailure {
+                ToastUtils.showCustomToast(
+                    requireContext(),
+                    "Error al crear cuenta: ${it.message}"
+                )
+            }
+        })
+
+    } // end of onViewCreated
+}//end of class

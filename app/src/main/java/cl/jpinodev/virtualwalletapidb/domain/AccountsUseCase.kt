@@ -1,5 +1,6 @@
 package cl.jpinodev.virtualwalletapidb.domain
 
+import cl.jpinodev.virtualwalletapidb.data.model.apientities.AccountRequest
 import cl.jpinodev.virtualwalletapidb.data.model.apientities.OperationRequest
 import cl.jpinodev.virtualwalletapidb.data.model.apientities.OperationResponse
 import cl.jpinodev.virtualwalletapidb.data.model.entities.Accounts
@@ -11,7 +12,7 @@ class AccountsUseCase(private val accountRepository: AccountsRepository) {
         return accountRepository.getOwnAccounts(token)
     }
 
-    suspend fun createAccount(token: String,account: Accounts): Response<Accounts> {
+    suspend fun createAccount(token: String,account: AccountRequest): Response<Accounts> {
         return accountRepository.createAccount(token,account)
     }
 
