@@ -12,4 +12,11 @@ interface AccountsRepository {
 
     suspend fun sendDepositMoney(accountId: Int, token: String, request: OperationRequest):
             Response<OperationResponse>
+
+    /*implementacion daos*/
+/*
+    suspend fun saveAccountOnDb(account: Accounts)
+
+    suspend fun getAccountsByUserFromDb(userId: Int): List<Accounts>*/
+
 }

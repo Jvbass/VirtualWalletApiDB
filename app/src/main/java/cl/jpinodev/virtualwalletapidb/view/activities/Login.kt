@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import cl.jpinodev.virtualwalletapidb.data.appdata.SharedPreferencesHelper
+import cl.jpinodev.virtualwalletapidb.data.local.database.AppDatabase
 import cl.jpinodev.virtualwalletapidb.data.network.api.UserApiService
 import cl.jpinodev.virtualwalletapidb.data.network.retrofit.RetrofitHelper
 import cl.jpinodev.virtualwalletapidb.data.repository.UsersRepositoryImpl
@@ -23,6 +24,8 @@ class Login : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        SharedPreferencesHelper.clearAll(this)
+
         binding.linkCrearCuenta.setOnClickListener {
             val intent = Intent(this, Register::class.java)
             startActivity(intent)
@@ -30,12 +33,14 @@ class Login : AppCompatActivity() {
 
         /***Dependencias para el login de usuario***/
         // instancia de Retrofit que está configurada para comunicarse con la API.
-        val userApiService: UserApiService =
+        val userApiService =
             RetrofitHelper.getRetrofit().create(UserApiService::class.java)
+        val dataBase = AppDatabase.getDatabase(this)
+
         //instancia de UsersRepositoryImpl
-        val usersRepository: UsersRepositoryImpl = UsersRepositoryImpl(userApiService)
+        val usersRepository = UsersRepositoryImpl(userApiService, dataBase.UserDao())
         //instancia de UsersUseCase le pasamos el repositorio (usersRepository).
-        val usersUseCase: UsersUseCase = UsersUseCase(usersRepository)
+        val usersUseCase = UsersUseCase(usersRepository)
         //instancia de UsersViewModel usando fabrica UsersViewModelFactory
         val usersViewModel: UsersViewModel by viewModels { UsersViewModelFactory(usersUseCase) }
 

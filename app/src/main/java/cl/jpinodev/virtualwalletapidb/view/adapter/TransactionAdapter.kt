@@ -20,13 +20,19 @@ class TransactionAdapter(private val transactions: List<Transactions>) :
 
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
         val transaction = transactions[position]
-        holder.accountId.text = transaction.accountId.toString()
-        holder.toAccountId.text = transaction.toAccountId.toString()
+        if (transaction.type == "payment") {
+            holder.transactionDetail.text = "Transf. a la cuenta "
+            holder.toAccountId.text = transaction.toAccountId.toString()
+            holder.transactionOperationType.text = "-"
+            holder.transactionOperationIcon.setImageResource(R.drawable.send_icon_yellow)
+        } else {
+            holder.transactionDetail.text = "Deposito desde la cuenta "
+            holder.toAccountId.text = transaction.accountId.toString()
+            holder.transactionOperationType.text = "+"
+            holder.transactionOperationIcon.setImageResource(R.drawable.request_icon_blue)
+        }
         holder.transactionDateTime.text = transaction.date.dateFormatterString()
         holder.transactionAmount.text = transaction.amount
-        holder.transactionOperationType.text = if (transaction.type == "payment") "-" else "+"
-        holder.transactionOperationIcon.setImageResource(if (transaction.type == "payment")
-            R.drawable.send_icon_yellow else R.drawable.request_icon_blue)
     }
 
     override fun getItemCount(): Int {

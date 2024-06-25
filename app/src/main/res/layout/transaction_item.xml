@@ -53,23 +53,23 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/transaction_user_name"
+                android:id="@+id/transactionDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/font_jua_wallet"
-                android:text="Yara"
+                android:text="Transf. a la cuenta "
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 tools:layout_editor_absoluteY="10dp" />
 
             <TextView
-                android:id="@+id/transaction_user_lastname"
+                android:id="@+id/numberAccount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="1dp"
                 android:fontFamily="@font/font_jua_wallet"
-                android:text="Khalil"
-                android:textColor="@color/black"
+                android:text="2258"
+                android:textColor="@color/primary_dark"
                 android:textSize="14sp"
                 tools:layout_editor_absoluteY="10dp" />
         </LinearLayout>
