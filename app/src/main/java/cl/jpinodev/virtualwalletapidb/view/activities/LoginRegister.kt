@@ -15,11 +15,11 @@ class LoginRegister : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.btnCrearCuenta.setOnClickListener{
+        binding.btnCrearCuenta.setOnClickListener {
             val intent = Intent(this, Register::class.java)
             startActivity(intent)
         }
-        binding.linkLoginCuenta.setOnClickListener{
+        binding.linkLoginCuenta.setOnClickListener {
             val intent = Intent(this, Login::class.java)
             startActivity(intent)
         }

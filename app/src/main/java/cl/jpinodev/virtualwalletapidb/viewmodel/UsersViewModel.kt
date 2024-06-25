@@ -71,7 +71,7 @@ class UsersViewModel(private val usersUseCase: UsersUseCase) : ViewModel() {
                 if (response.isSuccessful) {
                     _connectedUserLD.postValue(Result.success(response))
                     usersUseCase.saveUserOnDb(response.body()!!)
-                    Log.i( "UsersViewModel", "getConnectedUser: ${response.body()}" )
+                    Log.i("UsersViewModel", "getConnectedUser: ${response.body()}")
                 } else {
                     _connectedUserLD.postValue(
                         Result.failure(

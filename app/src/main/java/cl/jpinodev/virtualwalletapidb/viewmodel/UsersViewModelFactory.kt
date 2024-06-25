@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cl.jpinodev.virtualwalletapidb.domain.UsersUseCase
 
-class UsersViewModelFactory(private val usersUseCase: UsersUseCase): ViewModelProvider.Factory {
+class UsersViewModelFactory(private val usersUseCase: UsersUseCase) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(UsersViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")

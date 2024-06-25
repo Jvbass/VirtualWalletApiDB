@@ -16,7 +16,7 @@ class MainContainer : AppCompatActivity() {
         setContentView(binding.root)
     }
 
-   override fun onDestroy() {
+    override fun onDestroy() {
         super.onDestroy()
         SharedPreferencesHelper.clearAll(this)
     }
