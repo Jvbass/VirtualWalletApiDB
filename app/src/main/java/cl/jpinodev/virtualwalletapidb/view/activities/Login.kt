@@ -24,6 +24,8 @@ class Login : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //SharedPreferencesHelper.clearAll(this)
+
         binding.linkCrearCuenta.setOnClickListener {
             val intent = Intent(this, Register::class.java)
             startActivity(intent)
@@ -66,8 +68,8 @@ class Login : AppCompatActivity() {
                     usersViewModel.getConnectedUser(accessToken)
                     Log.i("TOKEN", accessToken)
                     ToastUtils.showCustomToast(this, "Login exitoso")
-                    val intent = Intent(this, MainContainer::class.java)
-                    startActivity(intent)
+                   /* val intent = Intent(this, MainContainer::class.java)
+                    startActivity(intent)*/
                     finish()
                 }
             }
@@ -82,6 +84,9 @@ class Login : AppCompatActivity() {
                 val user = response.body()
                 user?.let {
                     SharedPreferencesHelper.saveConnectedUser(this, it)
+                    val intent = Intent(this, MainContainer::class.java)
+                    startActivity(intent)
+                    finish()
                 }
             }
             result.onFailure {
