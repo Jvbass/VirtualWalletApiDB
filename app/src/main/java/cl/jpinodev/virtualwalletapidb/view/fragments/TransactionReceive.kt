@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import cl.jpinodev.virtualwalletapidb.R
 import cl.jpinodev.virtualwalletapidb.data.appdata.SharedPreferencesHelper
+import cl.jpinodev.virtualwalletapidb.data.local.database.AppDatabase
 import cl.jpinodev.virtualwalletapidb.data.model.apientities.OperationRequest
 import cl.jpinodev.virtualwalletapidb.data.network.api.AccountApiService
 import cl.jpinodev.virtualwalletapidb.data.network.retrofit.RetrofitHelper
@@ -49,7 +50,9 @@ class TransactionReceive : Fragment() {
         // Configurar AccountsViewModel
         val accountApiService: AccountApiService =
             RetrofitHelper.getRetrofit().create(AccountApiService::class.java)
-        val accountsRepository: AccountsRepositoryImpl = AccountsRepositoryImpl(accountApiService)
+        val database= AppDatabase.getDatabase(requireContext())
+
+        val accountsRepository = AccountsRepositoryImpl(accountApiService, database.AccountDao())
         val accountsUseCase: AccountsUseCase = AccountsUseCase(accountsRepository)
         val factory = AccountsViewModelFactory(accountsUseCase)
         accountsViewModel = ViewModelProvider(this, factory)[AccountsViewModel::class.java]

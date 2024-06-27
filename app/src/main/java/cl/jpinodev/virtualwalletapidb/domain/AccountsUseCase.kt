@@ -19,4 +19,13 @@ class AccountsUseCase(private val accountRepository: AccountsRepository) {
     suspend fun sendDepositMoney(accountId: Int,token: String,account: OperationRequest): Response<OperationResponse> {
         return accountRepository.sendDepositMoney(accountId,token,account)
     }
+
+    /*use case para la DB*/
+    suspend fun saveAccountOnDB(account: Accounts) {
+        return accountRepository.saveAccountOnDb(account)
+    }
+
+    suspend fun getAccountFromDb(userId: Int): List<Accounts> {
+        return accountRepository.getAccountsByUserFromDb(userId)
+    }
 }

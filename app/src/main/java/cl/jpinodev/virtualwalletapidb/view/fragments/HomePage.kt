@@ -12,6 +12,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import cl.jpinodev.virtualwalletapidb.R
 import cl.jpinodev.virtualwalletapidb.data.appdata.SharedPreferencesHelper
+import cl.jpinodev.virtualwalletapidb.data.local.database.AppDatabase
 import cl.jpinodev.virtualwalletapidb.data.model.apientities.AccountRequest
 import cl.jpinodev.virtualwalletapidb.data.network.api.AccountApiService
 import cl.jpinodev.virtualwalletapidb.data.network.api.TransactionApiService
@@ -52,9 +53,11 @@ class HomePage : Fragment() {
 
 
         //config accountsViewmodel
-        val accountService: AccountApiService =
+        val accountApiService: AccountApiService =
             RetrofitHelper.getRetrofit().create(AccountApiService::class.java)
-        val accountRepository = AccountsRepositoryImpl(accountService)
+        val database= AppDatabase.getDatabase(requireContext())
+
+        val accountRepository = AccountsRepositoryImpl(accountApiService, database.AccountDao())
         val accountUseCase = AccountsUseCase(accountRepository)
         val factoryAccounts = AccountsViewModelFactory(accountUseCase)
 

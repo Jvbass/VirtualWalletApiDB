@@ -1,5 +1,6 @@
 package cl.jpinodev.virtualwalletapidb.data.repository
 
+import cl.jpinodev.virtualwalletapidb.data.local.dao.AccountDao
 import cl.jpinodev.virtualwalletapidb.data.model.apientities.AccountRequest
 import cl.jpinodev.virtualwalletapidb.data.model.apientities.OperationRequest
 import cl.jpinodev.virtualwalletapidb.data.model.apientities.OperationResponse
@@ -9,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 
-class AccountsRepositoryImpl(private val accountService: AccountApiService):
+class AccountsRepositoryImpl(private val accountService: AccountApiService, private val accountDao: AccountDao):
     AccountsRepository {
     override suspend fun getOwnAccounts(token: String): Response<List<Accounts>> {
         return withContext(Dispatchers.IO) {
@@ -30,6 +31,21 @@ class AccountsRepositoryImpl(private val accountService: AccountApiService):
     ): Response<OperationResponse> {
         return withContext(Dispatchers.IO) {
             accountService.sendDepositMoney(accountId,token,request)
+        }
+    }
+
+    /*
+    * Implementacion metodos DAOs
+    * */
+    override suspend fun saveAccountOnDb(account: Accounts) {
+        return withContext(Dispatchers.IO) {
+            accountDao.insertAccount(account)
+        }
+    }
+
+    override suspend fun getAccountsByUserFromDb(userId: Int): List<Accounts> {
+        return withContext(Dispatchers.IO) {
+            accountDao.getAccountsByUserId(userId)
         }
     }
 }

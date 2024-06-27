@@ -7,29 +7,29 @@ import cl.jpinodev.virtualwalletapidb.data.repository.UsersRepository
 import retrofit2.Response
 
 // recibe el repositorio
-class UsersUseCase(private val repository: UsersRepository) {
+class UsersUseCase(private val usersRepository: UsersRepository) {
     suspend fun createUser(user: Users): Response<Users> {
-        return repository.createUser(user)
+        return usersRepository.createUser(user)
     }
 
     suspend fun loginUser(loginRequest: LoginRequest): Response<LoginResponse> {
-        return repository.loginUser(loginRequest)
+        return usersRepository.loginUser(loginRequest)
     }
 
     suspend fun getConnectedUser(token: String): Response<Users> {
-        return repository.getConnectedUser(token)
+        return usersRepository.getConnectedUser(token)
     }
 
     /*use case para la DB*/
     suspend fun saveUserOnDb(user: Users) {
-        return repository.saveUserOnDb(user)
+        return usersRepository.saveUserOnDb(user)
     }
 
     suspend fun getUserByIdFromDb(id: Int): Users? {
-        return repository.getUserByIdFromDb(id)
+        return usersRepository.getUserByIdFromDb(id)
     }
 
     suspend fun loginUserFromDb(email: String, password: String): Response<LoginResponse>{
-        return repository.loginUserFromDb(email, password)
+        return usersRepository.loginUserFromDb(email, password)
     }
 }
