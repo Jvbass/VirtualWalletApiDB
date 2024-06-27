@@ -192,7 +192,7 @@ class HomePage : Fragment() {
             }
         })
 
-       accountsViewModel.accountLD.observe(viewLifecycleOwner, Observer { result ->
+        accountsViewModel.accountLD.observe(viewLifecycleOwner, Observer { result ->
             result.onSuccess { response ->
                 val account = response.body()
                 account?.let {
