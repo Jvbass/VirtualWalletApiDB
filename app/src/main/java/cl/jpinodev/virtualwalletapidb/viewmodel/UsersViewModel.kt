@@ -54,7 +54,7 @@ class UsersViewModel(private val usersUseCase: UsersUseCase) : ViewModel() {
                 // la api responde un usuario en el request body
                 if (response.isSuccessful) {
                     _userLD.postValue(Result.success(response))
-                    usersUseCase.saveUserOnDb(user)
+                   // usersUseCase.saveUserOnDb(user)
                 } else {
                     _userLD.postValue(Result.failure(Exception(response.errorBody()?.string())))
                 }

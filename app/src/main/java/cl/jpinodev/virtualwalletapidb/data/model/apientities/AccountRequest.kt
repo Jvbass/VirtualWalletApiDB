@@ -5,5 +5,4 @@ data class AccountRequest(
     val money: Int,
     val isBlocked: Boolean,
     val userId: Int
-
 )

@@ -1,5 +1,6 @@
 package cl.jpinodev.virtualwalletapidb.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -26,6 +27,13 @@ class AccountsViewModel(private val accountUseCase: AccountsUseCase) : ViewModel
         viewModelScope.launch {
             try {
                 val response = accountUseCase.createAccount(token, account)
+                if (response.isSuccessful) {
+                   // Log.d("AccViewModel", "createAccount: ${response.body()}")
+                  //  Log.d("AccViewModel", "createAccount: $response")
+                    response.body()?.let {
+                        accountUseCase.saveAccountOnDB(it)
+                    }
+                }
                 _accountLD.postValue(Result.success(response))
             } catch (e: Exception) {
                 _accountLD.postValue(Result.failure(e))
