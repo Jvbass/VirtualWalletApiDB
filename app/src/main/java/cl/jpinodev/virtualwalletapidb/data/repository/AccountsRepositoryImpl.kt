@@ -10,7 +10,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 
-class AccountsRepositoryImpl(private val accountService: AccountApiService, private val accountDao: AccountDao):
+class AccountsRepositoryImpl(
+    private val accountService: AccountApiService,
+    private val accountDao: AccountDao
+) :
     AccountsRepository {
     override suspend fun getOwnAccounts(token: String): Response<List<Accounts>> {
         return withContext(Dispatchers.IO) {
@@ -20,7 +23,7 @@ class AccountsRepositoryImpl(private val accountService: AccountApiService, priv
 
     override suspend fun createAccount(token: String, account: AccountRequest): Response<Accounts> {
         return withContext(Dispatchers.IO) {
-            accountService.createAccount(token,account)
+            accountService.createAccount(token, account)
         }
     }
 
@@ -30,7 +33,7 @@ class AccountsRepositoryImpl(private val accountService: AccountApiService, priv
         request: OperationRequest
     ): Response<OperationResponse> {
         return withContext(Dispatchers.IO) {
-            accountService.sendDepositMoney(accountId,token,request)
+            accountService.sendDepositMoney(accountId, token, request)
         }
     }
 
@@ -43,9 +46,14 @@ class AccountsRepositoryImpl(private val accountService: AccountApiService, priv
         }
     }
 
-    override suspend fun getAccountsByUserFromDb(userId: Int): List<Accounts> {
+    override suspend fun getAccountsByUserIdFromDb(userId: Int): Result<List<Accounts>> {
         return withContext(Dispatchers.IO) {
-            accountDao.getAccountsByUserId(userId)
+            try {
+                val accounts = accountDao.getAccountsByUserId(userId)
+                Result.success(accounts)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
         }
     }
 }

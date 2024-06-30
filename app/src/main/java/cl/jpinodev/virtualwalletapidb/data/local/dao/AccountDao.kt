@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import cl.jpinodev.virtualwalletapidb.data.model.entities.Accounts
+import retrofit2.Response
 
 @Dao
 interface AccountDao {

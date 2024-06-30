@@ -15,12 +15,12 @@ import retrofit2.Response
 
 class AccountsViewModel(private val accountUseCase: AccountsUseCase) : ViewModel() {
     private val _accountLD = MutableLiveData<Result<Response<Accounts>>>()
-    private val _ownAccountsLD = MutableLiveData<Result<Response<List<Accounts>>>?>()
+    private val _ownAccountsLD = MutableLiveData<Result<List<Accounts>?>>()
     private val _operationLD = MutableLiveData<Result<Response<OperationResponse>>>()
 
 
     val accountLD: LiveData<Result<Response<Accounts>>> = _accountLD
-    val ownAccountsLD: MutableLiveData<Result<Response<List<Accounts>>>?> = _ownAccountsLD
+    val ownAccountsLD: MutableLiveData<Result<List<Accounts>?>> = _ownAccountsLD
     val operationLD: LiveData<Result<Response<OperationResponse>>> = _operationLD
 
     fun createAccount(token: String, account: AccountRequest) {
@@ -28,8 +28,8 @@ class AccountsViewModel(private val accountUseCase: AccountsUseCase) : ViewModel
             try {
                 val response = accountUseCase.createAccount(token, account)
                 if (response.isSuccessful) {
-                   // Log.d("AccViewModel", "createAccount: ${response.body()}")
-                  //  Log.d("AccViewModel", "createAccount: $response")
+                    // Log.d("AccViewModel", "createAccount: ${response.body()}")
+                    //  Log.d("AccViewModel", "createAccount: $response")
                     response.body()?.let {
                         accountUseCase.saveAccountOnDB(it)
                     }
@@ -41,13 +41,22 @@ class AccountsViewModel(private val accountUseCase: AccountsUseCase) : ViewModel
         }
     }
 
-    fun getOwnAccounts(token: String) {
+    fun getOwnAccounts(token: String, userId: Int) {
         viewModelScope.launch {
             try {
                 val response = accountUseCase.getOwnAccounts(token)
-                _ownAccountsLD.postValue(Result.success(response))
+                if (response.isSuccessful) {
+                    _ownAccountsLD.postValue(Result.success(response.body()))
+                    response.body()?.forEach { account ->
+                        accountUseCase.saveAccountOnDB(account)
+                    }
+                } else {
+                    val accounts = accountUseCase.getAccountsFromDb(userId)
+                    _ownAccountsLD.postValue(accounts)
+                }
             } catch (e: Exception) {
-                _ownAccountsLD.postValue(null)
+                val accounts = accountUseCase.getAccountsFromDb(userId)
+                _ownAccountsLD.postValue(accounts)
             }
         }
     }

@@ -25,7 +25,7 @@ class UsersUseCase(private val usersRepository: UsersRepository) {
         return usersRepository.saveUserOnDb(user)
     }
 
-    suspend fun getUserByIdFromDb(id: Int): Users? {
+    suspend fun getUserByIdFromDb(id: Int): Result<Users?> {
         return usersRepository.getUserByIdFromDb(id)
     }
 

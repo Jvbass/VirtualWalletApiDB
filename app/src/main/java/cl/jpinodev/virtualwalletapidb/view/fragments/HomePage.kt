@@ -16,18 +16,23 @@ import cl.jpinodev.virtualwalletapidb.data.local.database.AppDatabase
 import cl.jpinodev.virtualwalletapidb.data.model.apientities.AccountRequest
 import cl.jpinodev.virtualwalletapidb.data.network.api.AccountApiService
 import cl.jpinodev.virtualwalletapidb.data.network.api.TransactionApiService
+import cl.jpinodev.virtualwalletapidb.data.network.api.UserApiService
 import cl.jpinodev.virtualwalletapidb.data.network.retrofit.RetrofitHelper
 import cl.jpinodev.virtualwalletapidb.data.repository.AccountsRepositoryImpl
 import cl.jpinodev.virtualwalletapidb.data.repository.TransactionsRepositoryImpl
+import cl.jpinodev.virtualwalletapidb.data.repository.UsersRepositoryImpl
 import cl.jpinodev.virtualwalletapidb.databinding.FragmentHomePageBinding
 import cl.jpinodev.virtualwalletapidb.domain.AccountsUseCase
 import cl.jpinodev.virtualwalletapidb.domain.TransactionsUseCase
+import cl.jpinodev.virtualwalletapidb.domain.UsersUseCase
 import cl.jpinodev.virtualwalletapidb.view.adapter.TransactionAdapter
 import cl.jpinodev.virtualwalletapidb.view.utils.ToastUtils
 import cl.jpinodev.virtualwalletapidb.viewmodel.AccountsViewModel
 import cl.jpinodev.virtualwalletapidb.viewmodel.AccountsViewModelFactory
 import cl.jpinodev.virtualwalletapidb.viewmodel.TransactionsViewModel
 import cl.jpinodev.virtualwalletapidb.viewmodel.TransactionsViewModelFactory
+import cl.jpinodev.virtualwalletapidb.viewmodel.UsersViewModel
+import cl.jpinodev.virtualwalletapidb.viewmodel.UsersViewModelFactory
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -35,7 +40,7 @@ import java.util.Locale
 class HomePage : Fragment() {
     private lateinit var binding: FragmentHomePageBinding
     private lateinit var accountsViewModel: AccountsViewModel
-
+    private lateinit var usersViewModel: UsersViewModel
     private lateinit var transactionsViewModel: TransactionsViewModel
     private lateinit var transactionAdapter: TransactionAdapter
 
@@ -52,18 +57,16 @@ class HomePage : Fragment() {
         binding = FragmentHomePageBinding.bind(view)
 
 
-        //config accountsViewmodel
+        //config arquitectura cuentas
         val accountApiService: AccountApiService =
             RetrofitHelper.getRetrofit().create(AccountApiService::class.java)
-        val database= AppDatabase.getDatabase(requireContext())
-
+        val database = AppDatabase.getDatabase(requireContext())
         val accountRepository = AccountsRepositoryImpl(accountApiService, database.AccountDao())
         val accountUseCase = AccountsUseCase(accountRepository)
         val factoryAccounts = AccountsViewModelFactory(accountUseCase)
-
         accountsViewModel = ViewModelProvider(this, factoryAccounts)[AccountsViewModel::class.java]
 
-        //config transactionViewmodel
+        //config arquitectura transactiones
         val transactionService: TransactionApiService =
             RetrofitHelper.getRetrofit().create(TransactionApiService::class.java)
         val transactionsRepository =
@@ -72,6 +75,17 @@ class HomePage : Fragment() {
         val factoryTransactions = TransactionsViewModelFactory(transactionsUseCase)
         transactionsViewModel =
             ViewModelProvider(this, factoryTransactions)[TransactionsViewModel::class.java]
+
+        //config arquitectura usuarios
+        val userApiService: UserApiService =
+            RetrofitHelper.getRetrofit().create(UserApiService::class.java)
+        val databaseUSer = AppDatabase.getDatabase(requireContext())
+        val userRepository =
+            UsersRepositoryImpl(userApiService, databaseUSer.UserDao())
+        val userUseCase = UsersUseCase(userRepository)
+        val factoryUser = UsersViewModelFactory(userUseCase)
+        usersViewModel =
+            ViewModelProvider(this, factoryUser)[UsersViewModel::class.java]
 
         //config recyclerview para las transaccioens
         binding.recyclerTransactionList.layoutManager = LinearLayoutManager(requireContext())
@@ -86,10 +100,14 @@ class HomePage : Fragment() {
         }
 
         val token = SharedPreferencesHelper.getToken(requireContext())
+
         Log.i("HomePage", token.toString())
         token?.let {
-            accountsViewModel.getOwnAccounts("Bearer $token")
-            transactionsViewModel.getTransactions("Bearer $token")
+            val userId = user?.id
+            if (userId != null) {
+                accountsViewModel.getOwnAccounts("Bearer $token", userId)
+                transactionsViewModel.getTransactions("Bearer $token")
+            }
         }
 
         // navegacion botones y enlaces
@@ -106,8 +124,8 @@ class HomePage : Fragment() {
 
         // BTN crear cuenta
         binding.btnCreateAccount.setOnClickListener {
-            val token = SharedPreferencesHelper.getToken(requireContext())
-            if (token != null) {
+            val tokenUser = SharedPreferencesHelper.getToken(requireContext())
+            if (tokenUser != null) {
                 val currentDate =
                     SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
                 val newAccount = AccountRequest(
@@ -116,7 +134,7 @@ class HomePage : Fragment() {
                     isBlocked = false,
                     userId = 1
                 )
-                accountsViewModel.createAccount("Bearer $token", newAccount)
+                accountsViewModel.createAccount("Bearer $tokenUser", newAccount)
 
                 // observer para observar cuenta creada
                 accountsViewModel.accountLD.observe(viewLifecycleOwner, Observer { result ->
@@ -135,14 +153,11 @@ class HomePage : Fragment() {
             }
         }
 
-        /*****ViewModel Observers*****/
-        // cambios en ownAccountsLD
+        /*
+        * observa el liveData de las cuentas del usuario conectado
+        * */
         accountsViewModel.ownAccountsLD.observe(viewLifecycleOwner, Observer { result ->
-            result?.onSuccess { response ->
-                Log.i("HomePage", response.body().toString())
-
-                val accounts = response.body()
-                Log.i("HomePage", accounts.toString())
+            result?.onSuccess { accounts ->
                 if (!accounts.isNullOrEmpty()) {
                     // Mostrar la primera cuenta
                     val account = accounts[0]

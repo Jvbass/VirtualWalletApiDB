@@ -17,6 +17,6 @@ interface AccountsRepository {
 
     suspend fun saveAccountOnDb(account: Accounts)
 
-    suspend fun getAccountsByUserFromDb(userId: Int): List<Accounts>
+    suspend fun getAccountsByUserIdFromDb(userId: Int): Result<List<Accounts>>
 
 }

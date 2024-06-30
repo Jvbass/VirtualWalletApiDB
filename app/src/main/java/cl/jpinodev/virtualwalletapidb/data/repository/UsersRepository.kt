@@ -16,7 +16,7 @@ interface UsersRepository {
     /*implementacion daos*/
 
     suspend fun saveUserOnDb(user: Users)
-    suspend fun getUserByIdFromDb(id: Int): Users?
+    suspend fun getUserByIdFromDb(id: Int): Result<Users?>
     suspend fun loginUserFromDb(email: String, password: String): Response<LoginResponse>
 
 }

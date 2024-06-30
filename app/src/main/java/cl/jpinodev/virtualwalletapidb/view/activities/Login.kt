@@ -57,6 +57,10 @@ class Login : AppCompatActivity() {
 
         /*
         *  Observador para el login de usuario
+        * observa el resultado del login en el livedata loginLD.
+        * Si es exitosa (success) toma la respuesta de la api o db
+        * y obtiene el valor (token)(se valida si el token viene vacio ).
+        * Si falla captura el error y lo muestra en toast
         * */
         usersViewModel.loginLD.observe(this, Observer { result ->
             result.onSuccess { response ->
@@ -68,22 +72,23 @@ class Login : AppCompatActivity() {
                     usersViewModel.getConnectedUser(accessToken)
                     Log.i("TOKEN", accessToken)
                     ToastUtils.showCustomToast(this, "Login exitoso")
-                   /* val intent = Intent(this, MainContainer::class.java)
-                    startActivity(intent)*/
-                    finish()
                 }
+                finish()
             }
             result.onFailure {
-                Log.i("ErrorLogin", it.message.toString())
                 ToastUtils.showCustomToast(this, "Error al iniciar sesión: ${it.message}")
             }
         })
 
+        /*
+        * Observa la obtencion del usuario conectado en el livedata connectedUserLD.
+        * Si el resultado es exitoso (success) toma el usuario de la respuesta de la api o db ,
+        * si falla muestra un toast
+        * */
         usersViewModel.connectedUserLD.observe(this, Observer { result ->
-            result.onSuccess { response ->
-                val user = response.body()
+            result.onSuccess { user->
                 user?.let {
-                    SharedPreferencesHelper.saveConnectedUser(this, it)
+                    SharedPreferencesHelper.saveConnectedUser(this, user)
                     val intent = Intent(this, MainContainer::class.java)
                     startActivity(intent)
                     finish()

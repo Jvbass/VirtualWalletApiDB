@@ -25,7 +25,8 @@ class AccountsUseCase(private val accountRepository: AccountsRepository) {
         return accountRepository.saveAccountOnDb(account)
     }
 
-    suspend fun getAccountFromDb(userId: Int): List<Accounts> {
-        return accountRepository.getAccountsByUserFromDb(userId)
+    suspend fun getAccountsFromDb(userId: Int): Result<List<Accounts>> {
+        return accountRepository.getAccountsByUserIdFromDb(userId)
     }
+
 }

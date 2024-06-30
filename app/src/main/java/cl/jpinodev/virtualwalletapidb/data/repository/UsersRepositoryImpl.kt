@@ -47,9 +47,14 @@ class UsersRepositoryImpl(private val userService: UserApiService, private val u
         }
     }
 
-    override suspend fun getUserByIdFromDb(id: Int): Users? {
+    override suspend fun getUserByIdFromDb(id: Int): Result<Users?> {
         return withContext(Dispatchers.IO) {
-            userDao.getUserById(id)
+            try {
+                val users = userDao.getUserById(id)
+                Result.success(users)
+                } catch (e: Exception) {
+                Result.failure(e)
+            }
         }
     }
 
@@ -59,7 +64,7 @@ class UsersRepositoryImpl(private val userService: UserApiService, private val u
             user?.let {
                 val result = BCrypt.verifyer().verify(password.toCharArray(), it.password)
                 if (result.verified) {
-                    val loginResponse = LoginResponse("FakeTokenOffline")
+                    val loginResponse = LoginResponse("FakeTokenOffline", it.id)
                     Response.success(loginResponse)
                 } else {
                     Response.error(
