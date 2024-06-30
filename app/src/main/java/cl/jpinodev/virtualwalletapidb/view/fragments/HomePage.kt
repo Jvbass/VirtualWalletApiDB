@@ -94,6 +94,7 @@ class HomePage : Fragment() {
 
         // llamadas a SharedPreferences
         val user = SharedPreferencesHelper.getConnectedUser(requireContext())
+        Log.i("HomePage", user.toString())
         user?.let {
             val fullName = "${it.firstName} ${it.lastName}"
             binding.fullName.text = fullName

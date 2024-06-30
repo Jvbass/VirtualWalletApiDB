@@ -65,12 +65,18 @@ class Login : AppCompatActivity() {
         usersViewModel.loginLD.observe(this, Observer { result ->
             result.onSuccess { response ->
                 val accessToken = response.body()?.accessToken.toString()
+                val userIdFromDb = response.body()?.userId
+                Log.i("LoginActvt", accessToken)
+                Log.i("LoginActvt", userIdFromDb.toString())
                 if (accessToken.isEmpty()) {
                     ToastUtils.showCustomToast(this, "Error al iniciar sesión")
                 } else {
                     SharedPreferencesHelper.saveToken(this, accessToken)
                     usersViewModel.getConnectedUser(accessToken)
-                    Log.i("TOKEN", accessToken)
+                    if (userIdFromDb != null) {
+                        usersViewModel.getUserByIdFromDb(userIdFromDb)
+                    }
+                    Log.i("LoginActvt", accessToken)
                     ToastUtils.showCustomToast(this, "Login exitoso")
                 }
                 finish()
