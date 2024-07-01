@@ -44,9 +44,11 @@ class AccountsViewModel(private val accountUseCase: AccountsUseCase) : ViewModel
     fun getOwnAccounts(token: String, userId: Int) {
         viewModelScope.launch {
             try {
+                //pedimos a la api
                 val response = accountUseCase.getOwnAccounts(token)
                 if (response.isSuccessful) {
                     _ownAccountsLD.postValue(Result.success(response.body()))
+                    //guardamos en la db
                     response.body()?.forEach { account ->
                         accountUseCase.saveAccountOnDB(account)
                     }

@@ -102,13 +102,16 @@ class HomePage : Fragment() {
         }
 
         val token = SharedPreferencesHelper.getToken(requireContext())
+        val accountId = SharedPreferencesHelper.getAccount(requireContext())?.id
 
         Log.i("HomePage", token.toString())
         token?.let {
             val userId = user?.id
             if (userId != null) {
                 accountsViewModel.getOwnAccounts("Bearer $token", userId)
-                transactionsViewModel.getTransactions("Bearer $token")
+                if (accountId != null) {
+                    transactionsViewModel.getTransactions("Bearer $token", accountId)
+                }
             }
         }
 
@@ -140,7 +143,7 @@ class HomePage : Fragment() {
 
                 // observer para observar cuenta creada
                 accountsViewModel.accountLD.observe(viewLifecycleOwner, Observer { result ->
-                    result.onSuccess { response ->
+                    result.onSuccess {
                         ToastUtils.showCustomToast(requireContext(), "Cuenta creada con éxito")
                     }
                     result.onFailure {
@@ -186,14 +189,13 @@ class HomePage : Fragment() {
 
         //Observer cambios en el transactionsLD
         transactionsViewModel.transactionsLD.observe(viewLifecycleOwner, Observer { result ->
-            result.onSuccess { response ->
-                val transactions = response.body()?.data
-                transactions?.let {
+            result.onSuccess { transactions  ->
+                transactions?.let {transactionsList ->
                     if (transactions.isEmpty()) {
                         binding.emptyTransactionList.visibility = View.VISIBLE
                         binding.recyclerTransactionList.visibility = View.GONE
                     } else {
-                        transactionAdapter = TransactionAdapter(it)
+                        transactionAdapter = TransactionAdapter(transactionsList)
                         binding.recyclerTransactionList.adapter = transactionAdapter
                         binding.emptyTransactionList.visibility = View.GONE
                         binding.recyclerTransactionList.visibility = View.VISIBLE

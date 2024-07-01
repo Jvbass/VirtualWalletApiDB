@@ -3,6 +3,7 @@ package cl.jpinodev.virtualwalletapidb.data.model.entities
 import android.accounts.Account
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
@@ -20,7 +21,9 @@ import com.google.gson.annotations.SerializedName
             parentColumns = ["id"],
             childColumns = ["userId"],
             onDelete = ForeignKey.CASCADE
-        )]
+        )
+    ],
+    indices = [Index(value = ["accountId"]), Index(value = ["userId"])]
 )
 data class Transactions(
     @PrimaryKey

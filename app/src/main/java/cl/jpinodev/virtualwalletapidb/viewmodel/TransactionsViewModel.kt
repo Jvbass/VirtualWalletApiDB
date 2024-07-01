@@ -11,32 +11,28 @@ import kotlinx.coroutines.launch
 import retrofit2.Response
 
 class TransactionsViewModel(private val transactionUseCase: TransactionsUseCase) : ViewModel() {
-    private val _transactionsLD = MutableLiveData<Result<Response<TransactionResponse>>>()
-    val transactionsLD: LiveData<Result<Response<TransactionResponse>>> = _transactionsLD
+    private val _transactionsLD = MutableLiveData<Result<List<Transactions>?>>()
+    val transactionsLD: LiveData<Result<List<Transactions>?>> = _transactionsLD
 
-    fun getTransactions(token: String) {
+    fun getTransactions(token: String, accountId: Int) {
         viewModelScope.launch {
             try {
-                val response =
-                    transactionUseCase.getTransactions(token) // pedimos las transacciones a la api
+                // pedimos las transacciones a la api
+                val response = transactionUseCase.getTransactions(token)
                 if (response.isSuccessful) {
-
-                    _transactionsLD.postValue(Result.success(response))
+                    val transactions = response.body()?.data
+                    _transactionsLD.postValue(Result.success(transactions))
                     //guardamos en db
-                    response.body()?.data?.let { transactions ->
-                        saveTransactionsOnDb(transactions)
+                    response.body()?.data?.let { transactionsList ->
+                        saveTransactionsOnDb(transactionsList)
                     }
                 } else {
-                    _transactionsLD.postValue(
-                        Result.failure(
-                            Exception(
-                                response.errorBody()?.string()
-                            )
-                        )
-                    )
+                    val transactionsDb = transactionUseCase.getTransactionsFromDb(accountId)
+                    _transactionsLD.postValue(transactionsDb)
                 }
             } catch (e: Exception) {
-                _transactionsLD.postValue(Result.failure(e))
+                val transactionsDb = transactionUseCase.getTransactionsFromDb(accountId)
+                _transactionsLD.postValue(transactionsDb)
             }
         }
     }
