@@ -60,17 +60,18 @@ class HomePage : Fragment() {
         //config arquitectura cuentas
         val accountApiService: AccountApiService =
             RetrofitHelper.getRetrofit().create(AccountApiService::class.java)
-        val database = AppDatabase.getDatabase(requireContext())
-        val accountRepository = AccountsRepositoryImpl(accountApiService, database.AccountDao())
+        val databaseAccount = AppDatabase.getDatabase(requireContext())
+        val accountRepository = AccountsRepositoryImpl(accountApiService, databaseAccount.AccountDao())
         val accountUseCase = AccountsUseCase(accountRepository)
         val factoryAccounts = AccountsViewModelFactory(accountUseCase)
         accountsViewModel = ViewModelProvider(this, factoryAccounts)[AccountsViewModel::class.java]
 
         //config arquitectura transactiones
-        val transactionService: TransactionApiService =
+        val transactionApiService: TransactionApiService =
             RetrofitHelper.getRetrofit().create(TransactionApiService::class.java)
+        val databaseTransaction = AppDatabase.getDatabase(requireContext())
         val transactionsRepository =
-            TransactionsRepositoryImpl(transactionService)
+            TransactionsRepositoryImpl(transactionApiService, databaseTransaction.TransactionDao())
         val transactionsUseCase = TransactionsUseCase(transactionsRepository)
         val factoryTransactions = TransactionsViewModelFactory(transactionsUseCase)
         transactionsViewModel =
@@ -183,7 +184,7 @@ class HomePage : Fragment() {
             }
         })
 
-        //cambios transactionsLD
+        //Observer cambios en el transactionsLD
         transactionsViewModel.transactionsLD.observe(viewLifecycleOwner, Observer { result ->
             result.onSuccess { response ->
                 val transactions = response.body()?.data

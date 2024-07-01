@@ -16,12 +16,6 @@ import com.google.gson.annotations.SerializedName
             onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
-            entity = Accounts::class,
-            parentColumns = ["id"],
-            childColumns = ["toAccountId"],
-            onDelete = ForeignKey.CASCADE
-        ),
-        ForeignKey(
             entity = Users::class,
             parentColumns = ["id"],
             childColumns = ["userId"],
