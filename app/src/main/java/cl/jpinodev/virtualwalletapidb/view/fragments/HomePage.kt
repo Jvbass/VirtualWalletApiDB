@@ -95,7 +95,7 @@ class HomePage : Fragment() {
 
         // llamadas a SharedPreferences
         val user = SharedPreferencesHelper.getConnectedUser(requireContext())
-        Log.i("HomePage", user.toString())
+        Log.i("HomePageLog", user.toString())
         user?.let {
             val fullName = "${it.firstName} ${it.lastName}"
             binding.fullName.text = fullName
@@ -103,8 +103,9 @@ class HomePage : Fragment() {
 
         val token = SharedPreferencesHelper.getToken(requireContext())
         val accountId = SharedPreferencesHelper.getAccount(requireContext())?.id
+        Log.i("HomePageLog", "token: $token")
+        Log.i("HomePageLog", "accountId: $accountId")
 
-        Log.i("HomePage", token.toString())
         token?.let {
             val userId = user?.id
             if (userId != null) {
