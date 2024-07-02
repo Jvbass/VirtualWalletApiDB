@@ -160,7 +160,7 @@ class HomePage : Fragment() {
         }
 
         /*
-        * observa el liveData de las cuentas del usuario conectado
+        * observa el liveData de las cuentas del usuario conectado para pintar los datos de la cuenta
         * */
         accountsViewModel.ownAccountsLD.observe(viewLifecycleOwner, Observer { result ->
             result?.onSuccess { accounts ->

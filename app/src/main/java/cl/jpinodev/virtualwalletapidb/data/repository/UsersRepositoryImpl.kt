@@ -52,7 +52,7 @@ class UsersRepositoryImpl(private val userService: UserApiService, private val u
             try {
                 val users = userDao.getUserById(id)
                 Result.success(users)
-                } catch (e: Exception) {
+            } catch (e: Exception) {
                 Result.failure(e)
             }
         }
@@ -60,20 +60,25 @@ class UsersRepositoryImpl(private val userService: UserApiService, private val u
 
     override suspend fun loginUserFromDb(email: String, password: String): Response<LoginResponse> {
         return withContext(Dispatchers.IO) {
-            val user = userDao.getUserByEmail(email)
-            user?.let {
-                val result = BCrypt.verifyer().verify(password.toCharArray(), it.password)
+            val user = userDao.getUserByEmail(email) //buscamos usuario por correo
+            user?.let { userDb ->//del usuario encontrado comparamos la contraseña encriptada
+                val result = BCrypt.verifyer().verify(password.toCharArray(), userDb.password)
                 if (result.verified) {
-                    // respondemos con un token falso y la id del usuario encontrado
-                    val loginResponse = LoginResponse("TokenDB", it.id)
+                    // respondemos con un token hardcodeado y la id del usuario encontrado
+                    val loginResponse = LoginResponse("TokenDB", userDb.id)
                     Response.success(loginResponse)
                 } else {
-                    Response.error(
-                        401, ResponseBody.create(MediaType.parse("text/plain"), "Invalid credentials")
+                    Response.error( //si falla enviamos un codigo 401 para manejarlo como error
+                        401,
+                        ResponseBody.create(MediaType.parse("text/plain"), "Contraseña incorrecta")
                     )
                 }
             } ?: Response.error(
-                401, ResponseBody.create(MediaType.parse("text/plain"), "User not found")
+                401,
+                ResponseBody.create(
+                    MediaType.parse("text/plain"),
+                    "No existe usuario con ese correo"
+                )
             )
         }
     }

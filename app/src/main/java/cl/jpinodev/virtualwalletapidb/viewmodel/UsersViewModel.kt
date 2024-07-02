@@ -114,8 +114,14 @@ class UsersViewModel(private val usersUseCase: UsersUseCase) : ViewModel() {
     * */
     fun getUserByIdFromDb(id: Int) {
         viewModelScope.launch {
-            val result = usersUseCase.getUserByIdFromDb(id)
-            _connectedUserLD.postValue(result)
+            _connectedUserLD.postValue(
+                try {
+                    usersUseCase.getUserByIdFromDb(id)
+                } catch (e: Exception) {
+                    Log.e("UsersViewModel", "getUserByIdFromDb: ${e.message}")
+                    Result.failure(e)
+                }
+            )
         }
     }
 }

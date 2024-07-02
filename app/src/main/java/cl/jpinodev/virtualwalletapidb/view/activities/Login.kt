@@ -29,8 +29,6 @@ class Login : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //SharedPreferencesHelper.clearAll(this)
-
         binding.linkCrearCuenta.setOnClickListener {
             val intent = Intent(this, Register::class.java)
             startActivity(intent)
@@ -64,27 +62,30 @@ class Login : AppCompatActivity() {
             if (email.isEmpty() || password.isEmpty()) {
                 ToastUtils.showCustomToast(this, "Todos los campos son obligatorios")
             } else {
+                //llamamos el motodo logiUser del viewmodel para activar su liveData
                 usersViewModel.loginUser(email, password)
             }
         }
 
         /*
-        *  Observador para el login de usuario
+        *  Observador de la respuesta del login de usuario
         *
         * */
         usersViewModel.loginLD.observe(this, Observer { result ->
             result.onSuccess { response ->
-                //si hizo login desde api devuelve token y userId 0
-                // si hizo login desde db devuelve tokenfake y userId
+                //si hizo login desde api devuelve token desde la api y userId = 0
+                // si hizo login desde db devuelve tokenfake y userId del usuario encontrado
                 val accessToken = response.body()?.accessToken
                 val userIdFromDb = response.body()?.userId
                 if (accessToken != null && userIdFromDb != null) {
-                    if (userIdFromDb <= 0) { // login desde api
+                    if (userIdFromDb <= 0) { // login desde api si userId es 0
+                        //llamamos el metodo para obtener y la cuenta y usuario conectado desde api y activar el liveData
                         usersViewModel.getConnectedUser(accessToken)
                         accountsViewModel.getOwnAccountsFromApi("Bearer $accessToken")
+                        //guardamos el token en el sharedPreferences
                         SharedPreferencesHelper.saveToken(this, accessToken)
                     } else {//login desde db
-                        Log.i("LoginActvt", "From DB: $accessToken $userIdFromDb")
+                        //llamamos el metodo para obtener y la cuenta y usuario conectado desde db y activar el liveData
                         usersViewModel.getUserByIdFromDb(userIdFromDb)
                         accountsViewModel.getOwnAccountsFromDBbyUserId(userIdFromDb)
                     }
@@ -107,8 +108,6 @@ class Login : AppCompatActivity() {
                 if (user != null) {
                     val userId: Int = user.id
                     SharedPreferencesHelper.saveConnectedUser(this, user)
-                    //accountsViewModel.getOwnAccounts("faketoken", userId)
-                    Log.i("LoginActvt", "Id de user $userId")
                 }
             }
             result.onFailure {
@@ -119,7 +118,6 @@ class Login : AppCompatActivity() {
         accountsViewModel.ownAccountsLD.observe(this, Observer { result ->
             result.onSuccess { accounts ->
                 if (accounts != null) {
-                    Log.i("LoginActvt", "accounts key of the app: ${accounts.toString()}")
                     SharedPreferencesHelper.saveAccount(this, accounts[0])
                 }
                 val intent = Intent(this, MainContainer::class.java)
