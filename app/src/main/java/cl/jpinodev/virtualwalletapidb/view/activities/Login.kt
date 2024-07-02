@@ -117,9 +117,14 @@ class Login : AppCompatActivity() {
 
         accountsViewModel.ownAccountsLD.observe(this, Observer { result ->
             result.onSuccess { accounts ->
-                if (accounts != null) {
+                if (!accounts.isNullOrEmpty()) {
                     SharedPreferencesHelper.saveAccount(this, accounts[0])
                 }
+                val intent = Intent(this, MainContainer::class.java)
+                startActivity(intent)
+            }
+            result.onFailure {
+                ToastUtils.showCustomToast(this, "Error al obtener cuentas: ${it.message}")
                 val intent = Intent(this, MainContainer::class.java)
                 startActivity(intent)
             }
