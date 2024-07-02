@@ -8,12 +8,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import cl.jpinodev.virtualwalletapidb.data.appdata.SharedPreferencesHelper
 import cl.jpinodev.virtualwalletapidb.data.local.database.AppDatabase
+import cl.jpinodev.virtualwalletapidb.data.network.api.AccountApiService
 import cl.jpinodev.virtualwalletapidb.data.network.api.UserApiService
 import cl.jpinodev.virtualwalletapidb.data.network.retrofit.RetrofitHelper
+import cl.jpinodev.virtualwalletapidb.data.repository.AccountsRepositoryImpl
 import cl.jpinodev.virtualwalletapidb.data.repository.UsersRepositoryImpl
 import cl.jpinodev.virtualwalletapidb.databinding.ActivityLoginBinding
+import cl.jpinodev.virtualwalletapidb.domain.AccountsUseCase
 import cl.jpinodev.virtualwalletapidb.domain.UsersUseCase
 import cl.jpinodev.virtualwalletapidb.view.utils.ToastUtils
+import cl.jpinodev.virtualwalletapidb.viewmodel.AccountsViewModel
+import cl.jpinodev.virtualwalletapidb.viewmodel.AccountsViewModelFactory
 import cl.jpinodev.virtualwalletapidb.viewmodel.UsersViewModel
 import cl.jpinodev.virtualwalletapidb.viewmodel.UsersViewModelFactory
 
@@ -31,18 +36,26 @@ class Login : AppCompatActivity() {
             startActivity(intent)
         }
 
-        /***Dependencias para el login de usuario***/
-        // instancia de Retrofit que está configurada para comunicarse con la API.
+        //config users
         val userApiService =
             RetrofitHelper.getRetrofit().create(UserApiService::class.java)
-        val dataBase = AppDatabase.getDatabase(this)
-
-        //instancia de UsersRepositoryImpl
-        val usersRepository = UsersRepositoryImpl(userApiService, dataBase.UserDao())
-        //instancia de UsersUseCase le pasamos el repositorio (usersRepository).
+        val dataBaseUser = AppDatabase.getDatabase(this)
+        val usersRepository = UsersRepositoryImpl(userApiService, dataBaseUser.UserDao())
         val usersUseCase = UsersUseCase(usersRepository)
-        //instancia de UsersViewModel usando fabrica UsersViewModelFactory
         val usersViewModel: UsersViewModel by viewModels { UsersViewModelFactory(usersUseCase) }
+
+        //config arquitectura cuentas
+        val accountApiService: AccountApiService =
+            RetrofitHelper.getRetrofit().create(AccountApiService::class.java)
+        val databaseAccount = AppDatabase.getDatabase(this)
+        val accountRepository =
+            AccountsRepositoryImpl(accountApiService, databaseAccount.AccountDao())
+        val accountUseCase = AccountsUseCase(accountRepository)
+        val accountsViewModel: AccountsViewModel by viewModels {
+            AccountsViewModelFactory(
+                accountUseCase
+            )
+        }
 
         /*btnLogin*/
         binding.loginButton.setOnClickListener {
@@ -57,28 +70,26 @@ class Login : AppCompatActivity() {
 
         /*
         *  Observador para el login de usuario
-        * observa el resultado del login en el livedata loginLD.
-        * Si es exitosa (success) toma la respuesta de la api o db
-        * y obtiene el valor (token)(se valida si el token viene vacio ).
-        * Si falla captura el error y lo muestra en toast
+        *
         * */
         usersViewModel.loginLD.observe(this, Observer { result ->
             result.onSuccess { response ->
-                val accessToken = response.body()?.accessToken.toString()
+                //si hizo login desde api devuelve token y userId 0
+                // si hizo login desde db devuelve tokenfake y userId
+                val accessToken = response.body()?.accessToken
                 val userIdFromDb = response.body()?.userId
-                Log.i("LoginActvt", accessToken)
-                Log.i("LoginActvt", userIdFromDb.toString())
-                if (accessToken.isEmpty()) {
-                    ToastUtils.showCustomToast(this, "Error al iniciar sesión")
-                } else {
-                    SharedPreferencesHelper.saveToken(this, accessToken)
-                    usersViewModel.getConnectedUser(accessToken)
-                    if (userIdFromDb != null) {
+                if (accessToken != null && userIdFromDb != null) {
+                    if (userIdFromDb <= 0) { // login desde api
+                        usersViewModel.getConnectedUser(accessToken)
+                        accountsViewModel.getOwnAccountsFromApi("Bearer $accessToken")
+                        SharedPreferencesHelper.saveToken(this, accessToken)
+                    } else {//login desde db
+                        Log.i("LoginActvt", "From DB: $accessToken $userIdFromDb")
                         usersViewModel.getUserByIdFromDb(userIdFromDb)
+                        accountsViewModel.getOwnAccountsFromDBbyUserId(userIdFromDb)
                     }
-                    Log.i("LoginActvt", accessToken)
-                    ToastUtils.showCustomToast(this, "Login exitoso")
                 }
+                ToastUtils.showCustomToast(this, "Login exitoso")
                 finish()
             }
             result.onFailure {
@@ -87,22 +98,34 @@ class Login : AppCompatActivity() {
         })
 
         /*
-        * Observa la obtencion del usuario conectado en el livedata connectedUserLD.
-        * Si el resultado es exitoso (success) toma el usuario de la respuesta de la api o db ,
-        * si falla muestra un toast
-        * */
+    * Observa la obtencion del usuario conectado en el livedata connectedUserLD.
+    * Si el resultado es exitoso (success) toma el usuario de la respuesta de la api o db ,
+    * si falla muestra un toast
+    * */
         usersViewModel.connectedUserLD.observe(this, Observer { result ->
-            result.onSuccess { user->
-                user?.let {
+            result.onSuccess { user ->
+                if (user != null) {
+                    val userId: Int = user.id
                     SharedPreferencesHelper.saveConnectedUser(this, user)
-                    val intent = Intent(this, MainContainer::class.java)
-                    startActivity(intent)
-                    finish()
+                    //accountsViewModel.getOwnAccounts("faketoken", userId)
+                    Log.i("LoginActvt", "Id de user $userId")
                 }
             }
             result.onFailure {
                 ToastUtils.showCustomToast(this, "Error al obtener usuario: ${it.message}")
             }
         })
-    }
-}
+
+        accountsViewModel.ownAccountsLD.observe(this, Observer { result ->
+            result.onSuccess { accounts ->
+                if (accounts != null) {
+                    Log.i("LoginActvt", "accounts key of the app: ${accounts.toString()}")
+                    SharedPreferencesHelper.saveAccount(this, accounts[0])
+                }
+                val intent = Intent(this, MainContainer::class.java)
+                startActivity(intent)
+            }
+        })
+    } //end of oncreate
+}//end of class
+

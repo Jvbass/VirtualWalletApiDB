@@ -108,8 +108,8 @@ class HomePage : Fragment() {
 
         token?.let {
             val userId = user?.id
-            if (userId != null) {
-                accountsViewModel.getOwnAccounts("Bearer $token", userId)
+            if (userId != null && userId > 0) {
+                accountsViewModel.getOwnAccountsFromApi("Bearer $token")
                 if (accountId != null) {
                     transactionsViewModel.getTransactions("Bearer $token", accountId)
                 }

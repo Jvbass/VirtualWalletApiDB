@@ -64,7 +64,8 @@ class UsersRepositoryImpl(private val userService: UserApiService, private val u
             user?.let {
                 val result = BCrypt.verifyer().verify(password.toCharArray(), it.password)
                 if (result.verified) {
-                    val loginResponse = LoginResponse("FakeTokenOffline", it.id)
+                    // respondemos con un token falso y la id del usuario encontrado
+                    val loginResponse = LoginResponse("TokenDB", it.id)
                     Response.success(loginResponse)
                 } else {
                     Response.error(

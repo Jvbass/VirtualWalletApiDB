@@ -41,25 +41,37 @@ class AccountsViewModel(private val accountUseCase: AccountsUseCase) : ViewModel
         }
     }
 
-    fun getOwnAccounts(token: String, userId: Int) {
+    fun getOwnAccountsFromApi(token: String) {
         viewModelScope.launch {
             try {
-                //pedimos a la api
                 val response = accountUseCase.getOwnAccounts(token)
                 if (response.isSuccessful) {
-                    _ownAccountsLD.postValue(Result.success(response.body()))
-                    //guardamos en la db
-                    response.body()?.forEach { account ->
-                        accountUseCase.saveAccountOnDB(account)
-                    }
+                    response.body()?.let { accounts ->
+                        _ownAccountsLD.postValue(Result.success(accounts))
+                        accounts.forEach { account ->
+                            accountUseCase.saveAccountOnDB(account)
+                        }
+                    } ?: _ownAccountsLD.postValue(Result.failure(Exception("Respuesta vacía")))
                 } else {
-                    val accounts = accountUseCase.getAccountsFromDb(userId)
-                    _ownAccountsLD.postValue(accounts)
+                    _ownAccountsLD.postValue(Result.failure(Exception("Error: ${response.code()}")))
                 }
             } catch (e: Exception) {
-                val accounts = accountUseCase.getAccountsFromDb(userId)
-                _ownAccountsLD.postValue(accounts)
+                _ownAccountsLD.postValue(Result.failure(e))
             }
+        }
+    }
+
+    fun getOwnAccountsFromDBbyUserId(userId: Int) {
+        viewModelScope.launch {
+            _ownAccountsLD.postValue(
+                try {
+                    accountUseCase.getAccountsFromDb(userId)
+                } catch (e: Exception) {
+                    // Log del error para debugging
+                    Log.e("AccountViewModel", "Error al obtener cuentas", e)
+                    Result.failure(e)
+                }
+            )
         }
     }
 
