@@ -137,7 +137,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="2dp"
                     android:fontFamily="@font/font_jua_wallet"
-                    android:text="307"
+                    android:text="0"
                     android:textColor="@color/color_grey"
                     android:textSize="15sp" />
             </LinearLayout>
@@ -172,7 +172,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/font_jua_wallet"
-                    android:text="124.57"
+                    android:text="0.0"
                     android:textColor="@color/white"
                     android:textSize="48sp" />
             </LinearLayout>
