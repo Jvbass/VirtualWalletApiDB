@@ -27,6 +27,7 @@ En el desarrollo de este proyecto se presentaron desafíos de diferente índole,
 > [!IMPORTANT]
 >- **El desarrollo de este proyecto se adapta a la funcionalidad con la API para que sea fluida y complementaria a esta** 
 >- Las funcionalidades que permiten crear nuevos usuarios y nuevas cuentas, y realizar transacciones, se pueden utilizar sólo logrando una conexión a la API, por lo que se debe tener conexión a internet.
+>- La funcionalidad de la aplicacion sin conexion se limita a sólo ver la informacion del usuario con su nombre, cuenta con su numero de cuenta y saldo, y las ultimas transacciones.
 
 > [!TIP]
 >- La base de datos local se puebla desde la API, por tanto un nuevo usuario debe iniciar sesión por medio de la API para que se obtengan los datos y se guarden en la base de datos local.
