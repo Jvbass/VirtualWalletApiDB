@@ -5,11 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cl.jpinodev.virtualwalletapidb.data.model.apientities.TransactionResponse
 import cl.jpinodev.virtualwalletapidb.data.model.entities.Transactions
 import cl.jpinodev.virtualwalletapidb.domain.TransactionsUseCase
 import kotlinx.coroutines.launch
-import retrofit2.Response
 
 class TransactionsViewModel(private val transactionUseCase: TransactionsUseCase) : ViewModel() {
     private val _transactionsLD = MutableLiveData<Result<List<Transactions>?>>()

@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import cl.jpinodev.virtualwalletapidb.data.appdata.SharedPreferencesHelper
 import cl.jpinodev.virtualwalletapidb.data.local.database.AppDatabase
 import cl.jpinodev.virtualwalletapidb.data.model.entities.Users
 import cl.jpinodev.virtualwalletapidb.data.network.api.UserApiService
@@ -69,9 +70,7 @@ class Register : AppCompatActivity() {
 
         // observer de cambios en userLiveDAta, llamamos la funcion handleSuccess o handleError
         usersViewModel.userLD.observe(this, Observer { result ->
-            result.onSuccess { response ->
-                val response = response.body()
-                    Log.i("HomePageLog", response.toString())
+            result.onSuccess { userResponse->
                 ToastUtils.showCustomToast(this, "Usuario registrado exitosamente")
 
                 val intent = Intent(this, Login::class.java)
