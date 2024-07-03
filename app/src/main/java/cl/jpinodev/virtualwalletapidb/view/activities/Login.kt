@@ -81,6 +81,7 @@ class Login : AppCompatActivity() {
                     if (userIdFromDb <= 0) { // login desde api si userId es 0
                         //llamamos el metodo para obtener y la cuenta y usuario conectado desde api y activar el liveData
                         usersViewModel.getConnectedUser(accessToken)
+
                         accountsViewModel.getOwnAccountsFromApi("Bearer $accessToken")
                         //guardamos el token en el sharedPreferences
                         SharedPreferencesHelper.saveToken(this, accessToken)
@@ -119,6 +120,7 @@ class Login : AppCompatActivity() {
             result.onSuccess { accounts ->
                 if (!accounts.isNullOrEmpty()) {
                     SharedPreferencesHelper.saveAccount(this, accounts[0])
+                    Log.d("TAGaccDB", "Login: ${accounts[0]}")
                 }
                 val intent = Intent(this, MainContainer::class.java)
                 startActivity(intent)

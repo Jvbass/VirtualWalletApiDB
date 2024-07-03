@@ -28,13 +28,13 @@ class AccountsViewModel(private val accountUseCase: AccountsUseCase) : ViewModel
             try {
                 val response = accountUseCase.createAccount(token, account)
                 if (response.isSuccessful) {
-                    // Log.d("AccViewModel", "createAccount: ${response.body()}")
-                    //  Log.d("AccViewModel", "createAccount: $response")
                     response.body()?.let {
                         accountUseCase.saveAccountOnDB(it)
+                        _accountLD.postValue(Result.success(response))
                     }
+                } else {
+                    _accountLD.postValue(Result.failure(Exception("Error: ${response.code()}")))
                 }
-                _accountLD.postValue(Result.success(response))
             } catch (e: Exception) {
                 _accountLD.postValue(Result.failure(e))
             }

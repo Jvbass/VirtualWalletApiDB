@@ -2,6 +2,7 @@ package cl.jpinodev.virtualwalletapidb.view.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -29,29 +30,14 @@ class Register : AppCompatActivity() {
             startActivity(intent)
         }
 
-        /***Dependencias para el login de usuario***/
-        // instancia de Retrofit que está configurada para comunicarse con la API.
         val userApiService =
             RetrofitHelper.getRetrofit().create(UserApiService::class.java)
         val dataBase = AppDatabase.getDatabase(this)
-
-        //instancia de UsersRepositoryImpl
         val usersRepository = UsersRepositoryImpl(userApiService, dataBase.UserDao())
-        //instancia de UsersUseCase le pasamos el repositorio (usersRepository).
         val usersUseCase = UsersUseCase(usersRepository)
-        //instancia de UsersViewModel usando fabrica UsersViewModelFactory
         val usersViewModel: UsersViewModel by viewModels { UsersViewModelFactory(usersUseCase) }
 
 
-        // observer de cambios en userLiveDAta, llamamos la funcion handleSuccess o handleError
-        usersViewModel.userLD.observe(this, Observer { result ->
-            result.onSuccess { response ->
-                //TODO("Implementar crear cuenta con id de usuario ? ")
-                ToastUtils.showCustomToast(this, "Usuario registrado exitosamente")
-            }.onFailure { throwable ->
-                ToastUtils.showCustomToast(this, "Error al registrar usuario: ${throwable.message}")
-            }
-        })
 
         // Boton para crear cuenta
         binding.crearCuentaBtn.setOnClickListener {
@@ -77,9 +63,23 @@ class Register : AppCompatActivity() {
                 )
                 // Llamamos al metodo createUser del ViewModel para crear el usuario
                 usersViewModel.createUser(newUser)
-              val intent = Intent(this, Login::class.java)
-               startActivity(intent)
+
             }
         }
-    }
-}
+
+        // observer de cambios en userLiveDAta, llamamos la funcion handleSuccess o handleError
+        usersViewModel.userLD.observe(this, Observer { result ->
+            result.onSuccess { response ->
+                val response = response.body()
+                    Log.i("HomePageLog", response.toString())
+                ToastUtils.showCustomToast(this, "Usuario registrado exitosamente")
+
+                val intent = Intent(this, Login::class.java)
+                startActivity(intent)
+            }.onFailure { throwable ->
+                ToastUtils.showCustomToast(this, "Error al registrar usuario: ${throwable.message}")
+            }
+        })
+
+    } //end onCreate
+}//end class

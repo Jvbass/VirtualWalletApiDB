@@ -61,7 +61,8 @@ class HomePage : Fragment() {
         val accountApiService: AccountApiService =
             RetrofitHelper.getRetrofit().create(AccountApiService::class.java)
         val databaseAccount = AppDatabase.getDatabase(requireContext())
-        val accountRepository = AccountsRepositoryImpl(accountApiService, databaseAccount.AccountDao())
+        val accountRepository =
+            AccountsRepositoryImpl(accountApiService, databaseAccount.AccountDao())
         val accountUseCase = AccountsUseCase(accountRepository)
         val factoryAccounts = AccountsViewModelFactory(accountUseCase)
         accountsViewModel = ViewModelProvider(this, factoryAccounts)[AccountsViewModel::class.java]
@@ -95,26 +96,33 @@ class HomePage : Fragment() {
 
         // llamadas a SharedPreferences
         val user = SharedPreferencesHelper.getConnectedUser(requireContext())
+        val token = SharedPreferencesHelper.getToken(requireContext())
+        val accountId = SharedPreferencesHelper.getAccount(requireContext())
+
         Log.i("HomePageLog", user.toString())
+        Log.i("HomePageLog", "Token: ${token.toString()}")
+        Log.i("HomePageLog", accountId.toString())
+
         user?.let {
             val fullName = "${it.firstName} ${it.lastName}"
             binding.fullName.text = fullName
         }
 
-        val token = SharedPreferencesHelper.getToken(requireContext())
-        val accountId = SharedPreferencesHelper.getAccount(requireContext())?.id
-        Log.i("HomePageLog", "token: $token")
-        Log.i("HomePageLog", "accountId: $accountId")
-
-        token?.let {
-            val userId = user?.id
-            if (userId != null && userId > 0) {
+        if (token != null) {
+            token.let {
+                val userId = user?.id
                 accountsViewModel.getOwnAccountsFromApi("Bearer $token")
                 if (accountId != null) {
-                    transactionsViewModel.getTransactions("Bearer $token", accountId)
+                    transactionsViewModel.getTransactions("Bearer $token", accountId.id)
                 }
             }
+        } else {
+            if (user != null && accountId != null) {
+                accountsViewModel.getOwnAccountsFromDBbyUserId(user.id)
+                transactionsViewModel.getTransactions("faketoken", accountId.id)
+            }
         }
+
 
         // navegacion botones y enlaces
         val navController = Navigation.findNavController(view)
@@ -130,8 +138,7 @@ class HomePage : Fragment() {
 
         // BTN crear cuenta
         binding.btnCreateAccount.setOnClickListener {
-            val tokenUser = SharedPreferencesHelper.getToken(requireContext())
-            if (tokenUser != null) {
+            if (token != null) {
                 val currentDate =
                     SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
                 val newAccount = AccountRequest(
@@ -140,9 +147,9 @@ class HomePage : Fragment() {
                     isBlocked = false,
                     userId = 1
                 )
-                accountsViewModel.createAccount("Bearer $tokenUser", newAccount)
+                accountsViewModel.createAccount("Bearer $token", newAccount)
 
-                // observer para observar cuenta creada
+                // observer cuenta creada
                 accountsViewModel.accountLD.observe(viewLifecycleOwner, Observer { result ->
                     result.onSuccess {
                         ToastUtils.showCustomToast(requireContext(), "Cuenta creada con éxito")
@@ -190,8 +197,8 @@ class HomePage : Fragment() {
 
         //Observer cambios en el transactionsLD
         transactionsViewModel.transactionsLD.observe(viewLifecycleOwner, Observer { result ->
-            result.onSuccess { transactions  ->
-                transactions?.let {transactionsList ->
+            result.onSuccess { transactions ->
+                transactions?.let { transactionsList ->
                     if (transactions.isEmpty()) {
                         binding.emptyTransactionList.visibility = View.VISIBLE
                         binding.recyclerTransactionList.visibility = View.GONE

@@ -1,5 +1,6 @@
 package cl.jpinodev.virtualwalletapidb.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,6 +20,7 @@ class TransactionsViewModel(private val transactionUseCase: TransactionsUseCase)
             try {
                 // pedimos las transacciones a la api
                 val response = transactionUseCase.getTransactions(token)
+                Log.i("HomePageLog", "getTransactions: $response")
                 if (response.isSuccessful) {
                     val transactions = response.body()?.data
                     _transactionsLD.postValue(Result.success(transactions))
@@ -27,6 +29,7 @@ class TransactionsViewModel(private val transactionUseCase: TransactionsUseCase)
                         saveTransactionsOnDb(transactionsList)
                     }
                 } else {
+                    Log.i("HomePageLog", "getTransactionsDB: $accountId")
                     val transactionsDb = transactionUseCase.getTransactionsFromDb(accountId)
                     _transactionsLD.postValue(transactionsDb)
                 }
