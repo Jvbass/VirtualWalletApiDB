@@ -120,7 +120,6 @@ class Login : AppCompatActivity() {
             result.onSuccess { accounts ->
                 if (!accounts.isNullOrEmpty()) {
                     SharedPreferencesHelper.saveAccount(this, accounts[0])
-                    Log.d("TAGaccDB", "Login: ${accounts[0]}")
                 }
                 val intent = Intent(this, MainContainer::class.java)
                 startActivity(intent)

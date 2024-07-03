@@ -33,7 +33,7 @@ class AccountsViewModel(private val accountUseCase: AccountsUseCase) : ViewModel
                         _accountLD.postValue(Result.success(response))
                     }
                 } else {
-                    _accountLD.postValue(Result.failure(Exception("Error: ${response.code()}")))
+                    _accountLD.postValue(Result.failure(Exception("Error: $response")))
                 }
             } catch (e: Exception) {
                 _accountLD.postValue(Result.failure(e))
@@ -67,8 +67,6 @@ class AccountsViewModel(private val accountUseCase: AccountsUseCase) : ViewModel
                 try {
                     accountUseCase.getAccountsFromDb(userId)
                 } catch (e: Exception) {
-                    // Log del error para debugging
-                    Log.e("AccountViewModel", "Error al obtener cuentas", e)
                     Result.failure(e)
                 }
             )

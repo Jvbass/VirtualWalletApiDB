@@ -39,12 +39,12 @@ class UsersViewModel(private val usersUseCase: UsersUseCase) : ViewModel() {
                 }
                 if (loginFromApi != null && loginFromApi.isSuccessful) {
                     _loginLD.postValue(Result.success(loginFromApi))
-                    Log.i("UsersViewModel", "loginUser: ${loginFromApi.body()}")
+
                 } else { //login desde la db
                     val loginFromDb = usersUseCase.loginUserFromDb(email, password)
                     if (loginFromDb.isSuccessful) {
                         _loginLD.postValue(Result.success(loginFromDb))
-                        Log.i("UsersViewModel", "loginUserFromDb: ${loginFromDb.body()}")
+
                     } else {
                         _loginLD.postValue(Result.failure(Exception("Error al obtener usuario")))
                     }
@@ -91,7 +91,7 @@ class UsersViewModel(private val usersUseCase: UsersUseCase) : ViewModel() {
                     val user = response.body()
                     _connectedUserLD.postValue(Result.success(user))
                     user?.let { usersUseCase.saveUserOnDb(it) }
-                    Log.i("UsersViewModel", "getConnectedUser: ${response.body()}")
+
                 } else {
                     _connectedUserLD.postValue(
                         Result.failure(
@@ -118,7 +118,6 @@ class UsersViewModel(private val usersUseCase: UsersUseCase) : ViewModel() {
                 try {
                     usersUseCase.getUserByIdFromDb(id)
                 } catch (e: Exception) {
-                    Log.e("UsersViewModel", "getUserByIdFromDb: ${e.message}")
                     Result.failure(e)
                 }
             )

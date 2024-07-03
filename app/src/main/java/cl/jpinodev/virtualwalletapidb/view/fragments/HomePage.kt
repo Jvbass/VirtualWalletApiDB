@@ -99,10 +99,6 @@ class HomePage : Fragment() {
         val token = SharedPreferencesHelper.getToken(requireContext())
         val accountId = SharedPreferencesHelper.getAccount(requireContext())
 
-        Log.i("HomePageLog", user.toString())
-        Log.i("HomePageLog", "Token: ${token.toString()}")
-        Log.i("HomePageLog", accountId.toString())
-
         user?.let {
             val fullName = "${it.firstName} ${it.lastName}"
             binding.fullName.text = fullName
@@ -110,7 +106,6 @@ class HomePage : Fragment() {
 
         if (token != null) {
             token.let {
-                val userId = user?.id
                 accountsViewModel.getOwnAccountsFromApi("Bearer $token")
                 if (accountId != null) {
                     transactionsViewModel.getTransactions("Bearer $token", accountId.id)
@@ -119,10 +114,10 @@ class HomePage : Fragment() {
         } else {
             if (user != null && accountId != null) {
                 accountsViewModel.getOwnAccountsFromDBbyUserId(user.id)
+                Log.d("ACCOUNTS", "onViewCreated: $accountId")
                 transactionsViewModel.getTransactions("faketoken", accountId.id)
             }
         }
-
 
         // navegacion botones y enlaces
         val navController = Navigation.findNavController(view)
@@ -171,6 +166,7 @@ class HomePage : Fragment() {
         * */
         accountsViewModel.ownAccountsLD.observe(viewLifecycleOwner, Observer { result ->
             result?.onSuccess { accounts ->
+                Log.d("ACCOUNTS", "onViewCreated: $accounts")
                 if (!accounts.isNullOrEmpty()) {
                     // Mostrar la primera cuenta
                     val account = accounts[0]
@@ -187,11 +183,13 @@ class HomePage : Fragment() {
                 }
             }
             result?.onFailure {
+                Log.d("ACCOUNTS", "$it")
+                binding.btnCreateAccount.visibility = View.VISIBLE
+                binding.accountResume.visibility = View.GONE
                 ToastUtils.showCustomToast(
                     requireContext(),
                     "Error al obtener cuentas: ${it.message}"
                 )
-                Log.e("HomePage", "Error al obtener cuentas: ${it.message}")
             }
         })
 
