@@ -30,7 +30,7 @@ En el desarrollo de este proyecto se presentaron desafíos de diferente índole,
 >- La funcionalidad de la aplicacion sin conexion se limita a sólo ver la informacion del usuario con su nombre, cuenta con su numero de cuenta y saldo, y las ultimas transacciones.
 
 > [!TIP]
->- La base de datos local se puebla desde la API, por tanto un nuevo usuario debe iniciar sesión por medio de la API para que se obtengan los datos y se guarden en la base de datos local.
+>- La base de datos local se puebla desde la API, por tanto un nuevo usuario debe iniciar sesión almenos una primera vez por medio de la API para que se obtengan los datos y se guarden en la base de datos local.
 
 ## 🛠️ Tecnologías y Herramientas Utilizadas
 - Android Studio Jellyfish | 2023.3.1
